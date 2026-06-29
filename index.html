@@ -334,17 +334,24 @@
             max-height: 500px;
             aspect-ratio: 1 / 1;
         }
-        svg#coordinate-svg, canvas#drawing-canvas {
+        svg#coordinate-svg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border-radius: 8px;
-            background: rgba(5, 8, 16, 0.8);
+            background: rgba(5, 8, 16, 0.85);
             transition: background 0.3s ease;
         }
         canvas#drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            background: transparent !important;
             pointer-events: none;
         }
         .coordinate-label-popup {
@@ -679,8 +686,8 @@
         .tick-label {
             fill: #ffffff !important;
             font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 900;
             text-anchor: middle;
             dominant-baseline: middle;
         }
@@ -695,9 +702,12 @@
         }
 
         /* COORDINATE PLANE LIGHT THEME OVERRIDES */
-        svg#coordinate-svg.light-theme, canvas#drawing-canvas.light-theme {
+        svg#coordinate-svg.light-theme {
             background: #ffffff !important;
             box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.08);
+        }
+        canvas#drawing-canvas.light-theme {
+            background: transparent !important;
         }
         svg#coordinate-svg.light-theme .axis-line {
             stroke: #0f172a !important;
