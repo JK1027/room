@@ -843,6 +843,12 @@
             justify-content: center;
             gap: 10px;
         }
+        
+        .login-group input:focus {
+            border-color: var(--neon-cyan) !important;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -862,6 +868,15 @@
                 <div class="logo-sub neon-text-cyan">COORDINATE RESTORATION PROJECT</div>
                 <div class="logo-main neon-text-cyan">AI 연구소 탈출</div>
                 <div class="logo-sub neon-text-magenta">좌표평면의 비밀</div>
+            </div>
+
+            <!-- 사용자 인증 세션 등록 그룹 추가 -->
+            <div class="login-group glass-panel" style="width: 100%; max-width: 400px; padding: 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; z-index: 5;">
+                <div style="font-family: var(--font-cyber); font-size: 0.95rem; color: var(--neon-cyan); font-weight: bold; text-align: center; letter-spacing: 1px;">사용자 세션 등록</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="student-no" placeholder="학번 (예: 20203)" style="flex: 1; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-neon); color: #fff; text-align: center; border-radius: 4px; font-family: var(--font-mono); font-size: 0.9rem;">
+                    <input type="text" id="student-name" placeholder="이름 (예: 김철수)" style="flex: 1; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-neon); color: #fff; text-align: center; border-radius: 4px; font-family: var(--font-main); font-size: 0.9rem;">
+                </div>
             </div>
             
             <div class="intro-cutscene glass-panel" id="intro-dialog-box">
@@ -1589,7 +1604,7 @@
                 this.currentMissionIndex = 0; // 0 ~ 4 (M1 ~ M5)
                 
                 // Configs (Teacher controlled)
-                this.difficulty = 'medium';
+                this.difficulty = 'easy'; // 기본 난이도는 초급으로 설정
                 this.useTimer = true;
                 this.timerLimit = 1200; // 20 mins
                 this.allowHint = true;
@@ -1607,6 +1622,29 @@
                 // Mission dynamic data
                 this.currentMissionData = null;
                 this.userInputs = []; // For storing coordinates clicked or drawing path
+
+                // Session & Score Data (GPT 피드백 반영)
+                this.session = {
+                    sessionId: "",
+                    studentNo: "",
+                    studentName: "",
+                    startedAt: null,
+                    completedLevels: [], // ['easy', 'medium'] 등
+                    currentRoundScore: {
+                        wrongCount: 0,
+                        hintCount: 0
+                    },
+                    scores: {} // { easy: 95, medium: 88, hard: 92 } 형태의 최종 스코어 보존
+                };
+            }
+
+            generateSessionId() {
+                try {
+                    return crypto.randomUUID();
+                } catch(e) {
+                    // randomUUID 미지원 브라우저용 대체 함수
+                    return 'ss_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now().toString(36);
+                }
             }
 
             init() {
@@ -1620,7 +1658,7 @@
                     try {
                         const parsed = JSON.parse(saved);
                         this.currentMissionIndex = parsed.currentMissionIndex || 0;
-                        this.difficulty = parsed.difficulty || 'medium';
+                        this.difficulty = parsed.difficulty || 'easy';
                         this.useTimer = parsed.useTimer !== undefined ? parsed.useTimer : true;
                         this.timerLimit = parsed.timerLimit || 1200;
                         this.allowHint = parsed.allowHint !== undefined ? parsed.allowHint : true;
@@ -1630,6 +1668,19 @@
                         this.timeElapsed = parsed.timeElapsed || 0;
                         this.failCount = parsed.failCount || 0;
                         this.coordTheme = parsed.coordTheme || 'dark';
+                        
+                        // 세션 데이터 불러오기
+                        if (parsed.session) {
+                            this.session = parsed.session;
+                            
+                            // 로그인 인풋 필드가 로드 완료되면 기존 세션 정보 자동 완성
+                            const sNo = document.getElementById('student-no');
+                            const sName = document.getElementById('student-name');
+                            if (sNo && sName) {
+                                sNo.value = this.session.studentNo || "";
+                                sName.value = this.session.studentName || "";
+                            }
+                        }
                         
                         // Sync inputs in Modal UI
                         document.getElementById('setting-difficulty').value = this.difficulty;
@@ -1647,6 +1698,10 @@
             }
 
             saveSettings() {
+                this.saveLocal();
+            }
+
+            saveLocal() {
                 const data = {
                     currentMissionIndex: this.currentMissionIndex,
                     difficulty: this.difficulty,
@@ -1658,9 +1713,41 @@
                     achievements: this.achievements,
                     timeElapsed: this.timeElapsed,
                     failCount: this.failCount,
-                    coordTheme: this.coordTheme
+                    coordTheme: this.coordTheme,
+                    session: this.session // 세션 데이터 저장
                 };
                 localStorage.setItem('ai_lab_escape_save', JSON.stringify(data));
+            }
+
+            saveRemote(payload = {}) {
+                // 향후 GAS 스프레드시트에 실시간으로 기록을 남기는 원격 인터페이스
+                console.log("Remote Save Triggered:", {
+                    sessionId: this.session.sessionId,
+                    studentNo: this.session.studentNo,
+                    studentName: this.session.studentName,
+                    difficulty: this.difficulty,
+                    currentMission: this.currentMissionIndex + 1,
+                    timeElapsed: this.timeElapsed,
+                    ...payload
+                });
+
+                if (typeof google !== 'undefined' && google.script && google.script.run) {
+                    try {
+                        google.script.run
+                            .withFailureHandler(err => console.error("GAS Save Error:", err))
+                            .withSuccessHandler(() => console.log("GAS Save Success"))
+                            .saveGameProgress({
+                                session: this.session,
+                                currentMissionIndex: this.currentMissionIndex,
+                                timeElapsed: this.timeElapsed,
+                                difficulty: this.difficulty,
+                                timestamp: Date.now(),
+                                ...payload
+                            });
+                    } catch(e) {
+                        console.warn("GAS execution failed in this context", e);
+                    }
+                }
             }
 
             applyCoordTheme() {
@@ -1677,13 +1764,52 @@
                 }
             }
 
-            resetGameData() {
+            resetMission() {
+                // 단일 미션 단위 초기화 (사용자 입력 초기화 및 미션 로드)
+                this.userInputs = [];
+                this.loadActiveMission();
+            }
+
+            resetRound() {
+                // 현재 라운드(난이도) 초기화 (미션 1부터 재기동)
+                this.currentMissionIndex = 0;
+                this.inventory = [];
+                this.timeElapsed = 0;
+                this.isGameActive = true;
+                this.session.currentRoundScore = { wrongCount: 0, hintCount: 0 };
+                this.saveSettings();
+                this.loadActiveMission();
+            }
+
+            resetEntireGame() {
+                // 모든 세션 정보 및 로컬 세이브 완전 삭제
                 localStorage.removeItem('ai_lab_escape_save');
                 this.currentMissionIndex = 0;
+                this.difficulty = 'easy';
                 this.inventory = [];
                 this.achievements = [];
                 this.timeElapsed = 0;
                 this.failCount = 0;
+                this.isGameActive = false;
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                
+                this.session = {
+                    sessionId: "",
+                    studentNo: "",
+                    studentName: "",
+                    startedAt: null,
+                    completedLevels: [],
+                    currentRoundScore: { wrongCount: 0, hintCount: 0 },
+                    scores: {}
+                };
+
+                const sNo = document.getElementById('student-no');
+                const sName = document.getElementById('student-name');
+                if (sNo && sName) {
+                    sNo.value = "";
+                    sName.value = "";
+                }
+
                 this.saveSettings();
                 this.loadSettings();
             }
@@ -1730,7 +1856,7 @@
                 // Reset Mission Button
                 document.getElementById('reset-mission-btn').addEventListener('click', () => {
                     this.audio.playSFX('click');
-                    this.loadActiveMission();
+                    this.resetMission();
                 });
 
                 // Submit Mission Button
@@ -1749,6 +1875,10 @@
                     if (hintBox.style.display === 'block') {
                         hintBox.style.display = 'none';
                     } else {
+                        // 힌트 사용 카운트 증가
+                        this.session.currentRoundScore.hintCount++;
+                        this.saveSettings();
+
                         const m = MISSION_CONFIG[this.currentMissionIndex];
                         if (m) {
                             document.getElementById('hint-text-span').innerText = m.hints[this.difficulty];
@@ -1817,7 +1947,7 @@
                 document.getElementById('btn-force-reset').addEventListener('click', () => {
                     if (confirm("모든 게임 기록과 획득한 시스템 업적이 영구 삭제됩니다. 계속하시겠습니까?")) {
                         this.audio.playSFX('click');
-                        this.resetGameData();
+                        this.resetEntireGame();
                         document.getElementById('teacher-setup-modal').classList.remove('active');
                         location.reload();
                     }
@@ -1826,13 +1956,38 @@
                 // Restart from Ending
                 document.getElementById('restart-game-btn').addEventListener('click', () => {
                     this.audio.playSFX('click');
-                    this.resetGameData();
+                    this.resetEntireGame();
                     document.getElementById('ending-screen').classList.remove('active');
                     document.getElementById('intro-screen').classList.add('active');
                 });
             }
 
             startGame() {
+                const studentNoInput = document.getElementById('student-no');
+                const studentNameInput = document.getElementById('student-name');
+                const studentNo = studentNoInput ? studentNoInput.value.trim() : "";
+                const studentName = studentNameInput ? studentNameInput.value.trim() : "";
+
+                if (!studentNo || !studentName) {
+                    this.audio.playSFX('fail');
+                    alert("인증을 위해 학번과 이름을 모두 입력해 주세요.");
+                    return;
+                }
+
+                // 기존 세션이 다르거나 새로 시작하는 경우 세션 새로 생성
+                if (!this.session.sessionId || this.session.studentNo !== studentNo || this.session.studentName !== studentName) {
+                    this.session.sessionId = this.generateSessionId();
+                    this.session.studentNo = studentNo;
+                    this.session.studentName = studentName;
+                    this.session.startedAt = Date.now();
+                    this.session.completedLevels = [];
+                    this.session.scores = {};
+                    this.session.currentRoundScore = { wrongCount: 0, hintCount: 0 };
+                    this.difficulty = 'easy'; // 최초 세션 개설 시 초급으로 리셋
+                    this.currentMissionIndex = 0;
+                    this.inventory = [];
+                }
+
                 this.isGameActive = true;
                 this.timeElapsed = 0;
                 
@@ -1856,6 +2011,9 @@
                         this.updateTimerDisplay();
                     }
                 }, 1000);
+
+                this.saveSettings();
+                this.saveRemote({ action: "game_start" });
 
                 // Load first active mission or resume
                 this.loadActiveMission();
@@ -1907,7 +2065,7 @@
                 this.isGameActive = false;
                 this.audio.playSFX('fail');
                 alert("제한시간 초과! 연구실 보호 시스템 격벽이 폐쇄되었습니다. 재부팅을 실행합니다.");
-                this.resetGameData();
+                this.resetEntireGame();
                 location.reload();
             }
 
@@ -2358,6 +2516,9 @@
             onMissionSuccess() {
                 this.audio.playSFX('success');
                 
+                // 실시간 미션 클리어 정보 전송
+                this.saveRemote({ action: "mission_success", missionIndex: this.currentMissionIndex + 1 });
+
                 if (this.currentMissionIndex === 5) {
                     // Final gate pass success -> Trigger Ending!
                     this.addAchievement("🏆 연구소 탈출 완료");
@@ -2394,7 +2555,11 @@
             onMissionFailure() {
                 this.audio.playSFX('fail');
                 this.failCount++;
+                
+                // 오답 실패 카운트 증가 및 원격 전송
+                this.session.currentRoundScore.wrongCount++;
                 this.saveSettings();
+                this.saveRemote({ action: "mission_fail" });
 
                 // Shake & Glitch effects
                 const screen = document.getElementById('play-screen');
@@ -2411,6 +2576,51 @@
                     "입력한 좌표 제어 정보가 올바르지 않습니다! 좌표 오류로 시스템에 마찰이 생겼습니다.",
                     "화면 우측의 [구역 재부팅] 단추를 누르면 이 구역을 안전하게 초기화하고 다시 도전할 수 있습니다. 힌트 카드를 확인해보십시오!"
                 ]);
+            }
+
+            advanceDifficulty() {
+                // 현재 난이도를 클리어 완료 목록에 저장
+                if (!this.session.completedLevels.includes(this.difficulty)) {
+                    this.session.completedLevels.push(this.difficulty);
+                }
+
+                // 난이도 단계 격상 (easy -> medium -> hard)
+                if (this.difficulty === 'easy') {
+                    this.difficulty = 'medium';
+                } else if (this.difficulty === 'medium') {
+                    this.difficulty = 'hard';
+                }
+
+                // UI 연동 싱크
+                const diffSelect = document.getElementById('setting-difficulty');
+                if (diffSelect) diffSelect.value = this.difficulty;
+
+                // 다음 라운드 리셋 후 시작
+                this.resetRound();
+                this.saveRemote({ action: "difficulty_advance", newDifficulty: this.difficulty });
+            }
+
+            calculateScore() {
+                const baseScore = 100;
+                const wrongCount = this.session.currentRoundScore.wrongCount || 0;
+                const hintCount = this.session.currentRoundScore.hintCount || 0;
+                const time = this.timeElapsed;
+
+                const hintPenalty = hintCount * 5;
+                const wrongPenalty = wrongCount * 3;
+                
+                // 시간 페널티: 2분(120초) 초과 시 10초당 1점 감점
+                const timePenalty = time > 120 ? Math.floor((time - 120) / 10) : 0;
+                
+                // 최소 40점 방어선 보장
+                const score = Math.max(40, baseScore - hintPenalty - wrongPenalty - timePenalty);
+                
+                return {
+                    score: score,
+                    wrongCount: wrongCount,
+                    hintCount: hintCount,
+                    timeElapsed: time
+                };
             }
 
             // ==========================================
@@ -3182,25 +3392,94 @@
                 // Stop ambient background loop
                 this.audio.stopBGM();
 
+                // 1. 이번 라운드 성적 산출 및 세션 기록 보존
+                const roundReport = this.calculateScore();
+                this.session.scores[this.difficulty] = roundReport.score;
+                this.saveSettings();
+                this.saveRemote({ action: "round_clear", roundReport: roundReport });
+
                 // Switch UI screen
                 document.getElementById('play-screen').classList.remove('active');
                 document.getElementById('ending-screen').classList.add('active');
 
-                // Load stats
-                const m = Math.floor(this.timeElapsed / 60).toString().padStart(2, '0');
-                const s = (this.timeElapsed % 60).toString().padStart(2, '0');
-                document.getElementById('end-clear-time').innerText = `${m}분 ${s}초`;
-                document.getElementById('end-fail-count').innerText = `${this.failCount}회`;
+                // 2. 난이도별 리포트 HTML 구성 변경
+                const diffKo = { easy: "초급", medium: "중급", hard: "상급" };
+                const m = Math.floor(roundReport.timeElapsed / 60).toString().padStart(2, '0');
+                const s = (roundReport.timeElapsed % 60).toString().padStart(2, '0');
+
+                // 타이틀 텍스트 동적 수정
+                const endingTitle = document.querySelector('.ending-title');
+                if (endingTitle) {
+                    if (this.difficulty === 'hard') {
+                        endingTitle.innerHTML = "🎉 최종 정복 성공! 🎉";
+                        endingTitle.className = "ending-title neon-text-green";
+                    } else {
+                        endingTitle.innerHTML = `${diffKo[this.difficulty]} 탈출 성공!`;
+                        endingTitle.className = "ending-title neon-text-cyan";
+                    }
+                }
+
+                // 리포트 디테일 출력
+                const endClearTimeEl = document.getElementById('end-clear-time');
+                if (endClearTimeEl) {
+                    endClearTimeEl.innerHTML = `<strong>${diffKo[this.difficulty]}</strong>: ${m}분 ${s}초 (성적: <strong>${roundReport.score}점</strong>)`;
+                }
+                const endFailCountEl = document.getElementById('end-fail-count');
+                if (endFailCountEl) {
+                    endFailCountEl.innerText = `현재 라운드 오답: ${roundReport.wrongCount}회 / 힌트 사용: ${roundReport.hintCount}회`;
+                }
 
                 // Achievements List
                 const achBox = document.getElementById('end-achievements-box');
-                achBox.innerHTML = '';
-                this.achievements.forEach(ach => {
-                    const tag = document.createElement('span');
-                    tag.className = "achievement-tag";
-                    tag.innerText = ach;
-                    achBox.appendChild(tag);
-                });
+                if (achBox) {
+                    achBox.innerHTML = '';
+                    this.achievements.forEach(ach => {
+                        const tag = document.createElement('span');
+                        tag.className = "achievement-tag";
+                        tag.innerText = ach;
+                        achBox.appendChild(tag);
+                    });
+                }
+
+                // 3. 엔딩 화면 하단 버튼 동적 변경
+                const btnGroup = document.querySelector('#ending-screen .btn-group');
+                if (btnGroup) {
+                    btnGroup.innerHTML = ''; // 기존 버튼들 초기화
+                    
+                    if (this.difficulty === 'easy') {
+                        const nextBtn = document.createElement('button');
+                        nextBtn.className = "neon-btn success pulse-active";
+                        nextBtn.innerText = "중급 난이도로 탈출 도전 ➡️";
+                        nextBtn.addEventListener('click', () => {
+                            this.audio.playSFX('click');
+                            this.advanceDifficulty();
+                            document.getElementById('ending-screen').classList.remove('active');
+                        });
+                        btnGroup.appendChild(nextBtn);
+                    } else if (this.difficulty === 'medium') {
+                        const nextBtn = document.createElement('button');
+                        nextBtn.className = "neon-btn success pulse-active";
+                        nextBtn.innerText = "상급(최종) 난이도로 탈출 도전 ➡️";
+                        nextBtn.addEventListener('click', () => {
+                            this.audio.playSFX('click');
+                            this.advanceDifficulty();
+                            document.getElementById('ending-screen').classList.remove('active');
+                        });
+                        btnGroup.appendChild(nextBtn);
+                    } else {
+                        // hard (최종 정복 완료)
+                        const restartBtn = document.createElement('button');
+                        restartBtn.className = "neon-btn danger pulse-active";
+                        restartBtn.innerText = "처음부터 다시 시작 (초급 리셋)";
+                        restartBtn.addEventListener('click', () => {
+                            this.audio.playSFX('click');
+                            this.resetEntireGame();
+                            document.getElementById('ending-screen').classList.remove('active');
+                            document.getElementById('intro-screen').classList.add('active');
+                        });
+                        btnGroup.appendChild(restartBtn);
+                    }
+                }
 
                 // Run Canvas Fireworks particle loop
                 this.initFireworksEngine();
