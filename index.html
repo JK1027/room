@@ -46,6 +46,7 @@
             color: var(--text-color);
             font-family: var(--font-main);
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -154,6 +155,7 @@
         #game-container {
             width: 100%;
             height: 100%;
+            height: 100dvh;
             max-width: 1200px;
             max-height: 800px;
             padding: 16px;
@@ -313,6 +315,37 @@
             #game-board {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto 240px;
+            }
+        }
+
+        /* 모바일 세로모드 타이틀 및 로고 크기 축소 */
+        @media (max-width: 600px) {
+            .logo-main {
+                font-size: 2.2rem !important;
+            }
+            .logo-sub {
+                font-size: 0.9rem !important;
+                letter-spacing: 3px !important;
+            }
+        }
+
+        /* 모바일 가로 모드 (높이가 극단적으로 낮을 때) 대응 */
+        @media (max-height: 550px) and (orientation: landscape) {
+            #game-container {
+                padding: 8px;
+            }
+            #hud-panel {
+                margin-bottom: 8px;
+                padding: 6px 12px;
+            }
+            #game-board {
+                grid-template-columns: 1.2fr 1fr !important;
+                grid-template-rows: none !important;
+                gap: 8px;
+            }
+            .plane-wrapper {
+                max-width: 280px;
+                max-height: 280px;
             }
         }
 
@@ -2064,8 +2097,17 @@
                 };
 
                 bgRect.addEventListener('mousemove', onMove);
+                bgRect.addEventListener('touchmove', (e) => {
+                    if (e.cancelable) e.preventDefault();
+                    onMove(e);
+                }, { passive: false });
+
                 bgRect.addEventListener('mouseleave', () => {
                     tooltip.style.display = 'none';
+                });
+                bgRect.addEventListener('touchend', () => {
+                    tooltip.style.display = 'none';
+                    snapDot.style.opacity = 0;
                 });
 
                 // Magnetic Snap effect dot
@@ -2076,6 +2118,14 @@
                 svg.appendChild(snapDot);
 
                 bgRect.addEventListener('mousemove', (e) => {
+                    const snap = onMove(e);
+                    if (snap) {
+                        snapDot.setAttribute("cx", snap.xPx);
+                        snapDot.setAttribute("cy", snap.yPx);
+                        snapDot.style.opacity = 1;
+                    }
+                });
+                bgRect.addEventListener('touchmove', (e) => {
                     const snap = onMove(e);
                     if (snap) {
                         snapDot.setAttribute("cx", snap.xPx);
