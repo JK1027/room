@@ -2241,9 +2241,16 @@
                     const rawX = (xPx - center) / step;
                     const rawY = -(yPx - center) / step;
 
-                    // Snap to closest integer coordinate within -5 ~ 5
-                    const xVal = Math.max(minVal, Math.min(maxVal, Math.round(rawX)));
-                    const yVal = Math.max(minVal, Math.min(maxVal, Math.round(rawY)));
+                    // Check if current mission has coordinates with decimals
+                    let snapStep = 1;
+                    if (this.currentMissionIndex === 3 && this.currentMissionData && this.currentMissionData.points) {
+                        const hasDecimals = this.currentMissionData.points.some(p => p.x % 1 !== 0 || p.y % 1 !== 0);
+                        if (hasDecimals) snapStep = 0.5;
+                    }
+
+                    // Snap to closest coordinate within -5 ~ 5 based on snapStep
+                    const xVal = Math.max(minVal, Math.min(maxVal, Math.round(rawX / snapStep) * snapStep));
+                    const yVal = Math.max(minVal, Math.min(maxVal, Math.round(rawY / snapStep) * snapStep));
 
                     // Move tooltip
                     tooltip.style.left = `${xPx}px`;
@@ -3205,10 +3212,10 @@
                     const xPx = clientX - rect.left;
                     const yPx = clientY - rect.top;
 
-                    const center = 250;
-                    const step = 50;
-                    const xVal = Math.round((xPx - center) / step);
-                    const yVal = Math.round(-(yPx - center) / step);
+                    const hasDecimals = data.points.some(p => p.x % 1 !== 0 || p.y % 1 !== 0);
+                    const snapStep = hasDecimals ? 0.5 : 1;
+                    const xVal = Math.round(((xPx - center) / step) / snapStep) * snapStep;
+                    const yVal = Math.round((-(yPx - center) / step) / snapStep) * snapStep;
 
                     // Next expected point index in sequence
                     const expectedIdx = this.userInputs.length;
