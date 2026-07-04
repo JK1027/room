@@ -1933,7 +1933,15 @@
                             hintBox.style.display = 'block';
                         } else if (this.currentMissionIndex === 5) {
                             // Final mission hint
-                            document.getElementById('hint-text-span').innerText = "이전 구역들에서 얻은 단서 단어(M2)와 획득 칩 개수를 조합하십시오. 비밀번호 카드 힌트를 봅니다.";
+                            const saved = localStorage.getItem('ai_lab_escape_save');
+                            let targetWord = "GRID";
+                            if (saved) {
+                                try {
+                                    const parsed = JSON.parse(saved);
+                                    targetWord = parsed.m2Word || "GRID";
+                                } catch(e){}
+                            }
+                            document.getElementById('hint-text-span').innerText = `최종 탈출 암호는 [보안 단어] + [복구 구역 수(5)] 입니다. 복구된 보안 단어는 '${targetWord}' 이며, 최종 비밀번호는 '${targetWord}5' 입니다.`;
                             hintBox.style.display = 'block';
                         }
                     }
