@@ -926,6 +926,7 @@
             <div id="hud-panel" class="glass-panel">
                 <div class="hud-left">
                     <span class="hud-title neon-text-cyan" id="current-zone-name">SYSTEM BOOTING...</span>
+                    <span id="hud-difficulty-tag" class="neon-text-yellow" style="font-size: 0.85rem; border: 1px solid var(--neon-yellow); padding: 2px 6px; border-radius: 4px; font-family: var(--font-cyber); margin-left: 10px; box-shadow: var(--glow-yellow); display: inline-block;">C코스</span>
                     <div class="hud-progress-container">
                         <span style="font-size: 0.8rem; opacity: 0.7;">복구율:</span>
                         <div class="progress-bar-bg">
@@ -2440,6 +2441,19 @@
 
                 // Toggle submit buttons visibility depending on mission
                 document.getElementById('submit-mission-btn').style.display = 'none';
+
+                // Update difficulty tag (C코스, B코스, A코스)
+                const diffCourse = { easy: "C코스", medium: "B코스", hard: "A코스" };
+                const diffColors = { easy: "var(--neon-yellow)", medium: "var(--neon-cyan)", hard: "var(--neon-magenta)" };
+                const diffGlows = { easy: "var(--glow-yellow)", medium: "var(--glow-cyan)", hard: "var(--glow-magenta)" };
+                
+                const diffTag = document.getElementById('hud-difficulty-tag');
+                if (diffTag) {
+                    diffTag.innerText = diffCourse[this.difficulty] || "C코스";
+                    diffTag.style.color = diffColors[this.difficulty];
+                    diffTag.style.borderColor = diffColors[this.difficulty];
+                    diffTag.style.boxShadow = diffGlows[this.difficulty];
+                }
 
                 // If finished all 5 missions, show final gate code mission
                 if (this.currentMissionIndex >= 5) {
