@@ -1133,11 +1133,7 @@
             drive: `<svg viewBox="0 0 24 24"><path d="M19 15v4H5v-4h14m1-2H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1m-4 3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1m-3 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1M12 2H4c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2M7 9H5V7h2v2zm4 0H9V7h2v2z"/></svg>`,
             goggles: `<svg viewBox="0 0 24 24"><path d="M22 8.5c-.75-1.5-2.25-2.5-4-2.5-1.5 0-2.83.67-3.72 1.74C13.39 6.67 12.06 6 10.5 6c-1.75 0-3.25 1-4 2.5C4.25 8.75 2.25 10 2 12c.25 2 2.25 3.25 4.5 3.5.75 1.5 2.25 2.5 4 2.5 1.5 0 2.83-.67 3.72-1.74.89 1.07 2.22 1.74 3.78 1.74 1.75 0 3.25-1 4-2.5 2.25-.25 4.25-1.5 4.5-3.5-.25-2-2.25-3.25-4.5-3.5zm-11.5 6c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zm7 0c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
             core: `<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z"/></svg>`,
-            key: `<svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>`,
-            card: `<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>`
-        };
-
-        const MISSION_CONFIG = [
+            key: `<svg viewBox="0 0 24 24"><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-        const MISSION_CONFIG = [
             {
                 id: "m1",
                 name: "ZONE 1: 메인프레임 복구",
@@ -1182,24 +1178,19 @@
                     hard: "원점에서부터 x좌표와 y좌표가 가리키는 대칭 관계를 차분히 세어 클릭하세요."
                 },
                 generateMissionData: function(difficulty, randomize) {
-                    // 난이도에 따른 3개 좌표 생성
                     let coords = [];
                     if (difficulty === 'easy') {
-                        // 1사분면 위주
                         coords = [{x: 2, y: 3}, {x: 4, y: 1}, {x: 1, y: 4}];
                     } else if (difficulty === 'medium') {
-                        // 모든 사분면 혼합
                         coords = [{x: -3, y: 2}, {x: 4, y: -2}, {x: -2, y: -4}];
                     } else {
-                        // 축 위의 점, 또는 큰 좌표
                         coords = [{x: 0, y: -4}, {x: 5, y: 0}, {x: -3, y: 3}];
                     }
 
                     if (randomize) {
-                        // 임의의 정수 좌표 생성 (-5 ~ 5 범위)
                         coords = [];
                         while(coords.length < 3) {
-                            let x = Math.floor(Math.random() * 9) - 4; // -4 ~ 4
+                            let x = Math.floor(Math.random() * 9) - 4;
                             let y = Math.floor(Math.random() * 9) - 4;
                             if (difficulty === 'easy') {
                                 x = Math.abs(x) || 1;
@@ -1208,7 +1199,6 @@
                                 if (x === 0) x = 2;
                                 if (y === 0) y = -2;
                             }
-                            // 중복 체크
                             if (!coords.some(c => c.x === x && c.y === y)) {
                                 coords.push({x, y});
                             }
@@ -1242,7 +1232,7 @@
                 successDialogs: {
                     easy: [
                         "시스템 문이 열렸습니다! 아주 훌륭한 해독 능력이십니다.",
-                        "여기서 중요한 팁! 방금 복원해 낸 암호 단어는 나중에 최종 탈출 구역(ZONE 5 통제 콘솔)의 시스템 락을 해제할 때 필수적이니 꼭 메모해 두거나 기억해 두세요!",
+                        "여기서 중요한 팁! 방금 복원해 낸 암호 단어는 나중에 최종 탈출 구역의 시스템 락을 해제할 때 필수적이니 꼭 메모해 두거나 기억해 두세요!",
                         "다음 구역의 안전한 통과를 위해 보이지 않는 격자를 탐지하는 [레이저 차단 고글]을 획득했습니다."
                     ],
                     medium: [
@@ -1272,16 +1262,14 @@
                     const pool = wordPool[difficulty] || wordPool.medium;
                     const word = pool[Math.floor(Math.random() * pool.length)];
                     
-                    // 단어 철자들을 무작위 좌표에 뿌리기
                     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     let charPositions = [];
                     let usedCoords = new Set();
                     
-                    // 1. 단어 철자 배치
                     for (let i = 0; i < word.length; i++) {
                         let placed = false;
                         while(!placed) {
-                            let x = Math.floor(Math.random() * 9) - 4; // -4 ~ 4
+                            let x = Math.floor(Math.random() * 9) - 4;
                             let y = Math.floor(Math.random() * 9) - 4;
                             let key = `${x},${y}`;
                             if (!usedCoords.has(key)) {
@@ -1292,7 +1280,6 @@
                         }
                     }
                     
-                    // 2. 더미 철자들 배치 (15개 이상)
                     let dummyCount = difficulty === 'easy' ? 8 : (difficulty === 'medium' ? 12 : 16);
                     for (let i = 0; i < dummyCount; i++) {
                         let placed = false;
@@ -1309,7 +1296,6 @@
                         }
                     }
                     
-                    // 정답은 단어와 정답 좌표 순서쌍 리스트
                     const answerCoords = charPositions
                         .filter(p => p.order !== -1)
                         .sort((a, b) => a.order - b.order)
@@ -1362,12 +1348,10 @@
                 itemToUse: "레이저 차단 고글",
                 hints: {
                     easy: "x > 0은 오른쪽 영역을 뜻하고, y < 0은 아래쪽 영역을 뜻합니다. 둘 다 아닌 안전한 사분면을 선택하세요.",
-                    medium: "사분면의 정의를 기억하세요! 제1사분면(+,+), 제2사분면(-,+), 제3사분면(-,-), 제4사분면(+,-)입니다.",
+                    medium: "사분면의 정의를 기억하세요! 제1사분면(+,+), 제2사분면(-,+), 제3사분면(-,-), 제4사분면(+,-)의 위치를 확인하세요.",
                     hard: "조건 'y > x'는 y좌표가 x좌표보다 큰 영역을 의미합니다. 좌표의 대소 관계를 잘 비교하여 안전지대를 정하세요."
                 },
                 generateMissionData: function(difficulty, randomize) {
-                    // 3개 스테이지의 안전지대 생성
-                    // 각 스테이지는 레이저 조건 설명문과, 그 조건을 만족하지 않는(안전한) 타겟 좌표
                     const stages = [];
                     
                     if (difficulty === 'easy') {
@@ -1403,7 +1387,6 @@
                             hint: "x와 y의 부호가 다른 제2사분면, 제4사분면 또는 축 위를 고르세요."
                         });
                     } else {
-                        // hard
                         stages.push({
                             warning: "y > x (y좌표가 x좌표보다 큰 영역) 레이저 활성화!",
                             test: (x, y) => y <= x,
@@ -1434,6 +1417,324 @@
                         "비상 발전기 룸입니다. 획득한 [에너지 코어]를 기동 장치에 클릭하여 결합해 주십시오.",
                         "전력 피드백 회로가 끊어져 있습니다. 좌표 가이드선을 보며 순서대로 점을 이어주면 됩니다.",
                         "순서쌍 좌표들이 화면에 표시되니, 마우스로 선을 차례대로 이어 드로잉 회로를 완성하세요."
+                    ],
+                    medium: [
+                        "발전실에 도달했으나, 이미 전력선 피드백 노드가 모두 파열되었습니다. [에너지 코어]를 시급히 도킹시켜 주십시오.",
+                        "해커 X가 회로 노드를 훼방놓았습니다. 제시되는 11개의 좌표를 정밀하게 이어 아름다운 '별 모양' 회로망을 복원해야 전력이 우회되어 가동됩니다.",
+                        "좌표축 부호(+,-)를 헷갈리지 마시고 한 획으로 끊김 없이 정확하게 순서대로 그려 가십시오!"
+                    ],
+                    hard: [
+                        "원자로 냉각 발전기가 차단되어 임계 온도에 도달했습니다! 신속하게 [에너지 코어]를 결합하여 발전기를 강제 시동하십시오!",
+                        "해커 X: '너희가 올 수 있는 곳은 여기까지다. 전력 회로의 매개 변수들을 복잡하게 격자 배치해 두었지!'",
+                        "NOVA: '최종 복합 피드백 회로는 16개 점을 복잡하게 이어야 하는 열쇠 모양의 기하 패턴입니다. 눈금이 교란되는 와중에도 오차 없이 드로잉 하십시오!'"
+                    ]
+                },
+                successDialogs: {
+                    easy: [
+                        "회로 복구 성공! 발전기가 정상 기동하며 복도 전등이 켜집니다.",
+                        "최종 게이트 콘솔을 열기 위한 [마스터 액세스 키]를 입수했습니다. 마지막 방으로 향하세요!"
+                    ],
+                    medium: [
+                        "별 모양 우회 회로 작동 완료! 발전기가 엄청난 전력을 뿜어내며 시스템 50%가 복구되었습니다.",
+                        "탈출 터미널의 잠금을 완전히 제어할 [마스터 액세스 키]를 획득했습니다. 드디어 탈출이 코앞입니다!"
+                    ],
+                    hard: [
+                        "원자로가 안정 상태로 극적 전환되었습니다! 발전기 강제 복구 성공!",
+                        "중추 메인컴퓨터 해킹 락을 강제 파괴할 [마스터 액세스 키]를 입수했습니다. 마지막 비상문으로 즉시 질주하십시오!"
+                    ]
+                },
+                itemToReward: { name: "마스터 액세스 키", icon: SVGS.key, tooltip: "연구소 메인 프레임의 마스터 컴퓨터와 탈출 잠금 해제 시스템 제어 키" },
+                itemToUse: "에너지 코어",
+                hints: {
+                    easy: "그려지는 순서에 따라 차례대로 클릭하거나 마우스를 눌러 드래그하며 연결해 보세요.",
+                    medium: "완성되는 그림은 대칭 형태를 이룹니다. 모양이 완성될 때까지 다음 좌표를 차례로 이어가세요.",
+                    hard: "좌표가 건너뛰는 큰 격자가 있습니다. 순서가 어긋나지 않게 순서쌍의 순서를 메모하면서 연결하세요."
+                },
+                generateMissionData: function(difficulty, randomize) {
+                    const patterns = [
+                        {
+                            name: "별자리 피드백 회로 (별)",
+                            points: [{x:0, y:4}, {x:1, y:1}, {x:4, y:1}, {x:2, y:-1}, {x:3, y:-4}, {x:0, y:-2}, {x:-3, y:-4}, {x:-2, y:-1}, {x:-4, y:1}, {x:-1, y:1}, {x:0, y:4}]
+                        },
+                        {
+                            name: "비상 잠금 해제 키 회로 (열쇠)",
+                            points: [{x:-2, y:2}, {x:2, y:2}, {x:2, y:-2}, {x:-2, y:-2}, {x:-2, y:2}, {x:-4, y:0}, {x:-2, y:-2}, {x:2, y:0}, {x:4, y:0}, {x:4, y:-1}, {x:3.5, y:-1}, {x:3.5, y:0}, {x:3, y:0}, {x:3, y:-1}, {x:2.5, y:-1}, {x:2.5, y:0}]
+                        },
+                        {
+                            name: "고속 전력 증폭 회로 (번개)",
+                            points: [{x:-1, y:4}, {x:3, y:1}, {x:1, y:0}, {x:4, y:-4}, {x:-2, y:-1}, {x:0, y:0}, {x:-3, y:4}]
+                        }
+                    ];
+                    let chosen;
+                    if (difficulty === 'easy') {
+                        chosen = patterns[2];
+                    } else if (difficulty === 'medium') {
+                        chosen = patterns[0];
+                    } else {
+                        chosen = patterns[1];
+                    }
+                    return {
+                        patternName: chosen.name,
+                        points: chosen.points
+                    };
+                }
+            },
+            {
+                id: "m5",
+                name: "ZONE 5: 냉각수 펌프 로그 분석",
+                objective: "냉각수 펌프 상태 그래프를 해석하여 요구되는 상태 변화 구간을 찾으십시오.",
+                npcName: "NOVA",
+                introDialogs: {
+                    easy: [
+                        "NOVA: 발전기 가동에 성공했어요! 그런데… 코어 냉각수 수위 그래프가 수상합니다.",
+                        "어느 시간대에 수위가 '줄어들고 있는지' 그래프에서 읽고 해당 구간을 선택해 주세요."
+                    ],
+                    medium: [
+                        "해커 X: '냉각 데이터도 조작해두었다. 과연 복구할 수 있을까?'",
+                        "NOVA: 수위가 일정하게 유지되는(변화가 없는) 구간을 찾아야 냉각 루프를 우회할 수 있습니다!"
+                    ],
+                    hard: [
+                        "해커 X: '크크, 그래프까지 위조했다!'",
+                        "NOVA: 수위가 '가장 빠르게 증가하는' 구간의 기울기 값을 구하고 해당 구간을 클릭해 주십시오."
+                    ]
+                },
+                successDialogs: {
+                    easy: [
+                        "NOVA: 비정상 구간 탐지 성공! 냉각수 펌프를 긴급 가동했습니다.",
+                        "온도 유지 제어에 필요한 [냉각수 제어 칩]을 획득했습니다."
+                    ],
+                    medium: [
+                        "NOVA: 루프 우회 완료! 코어 온도가 안정화 영역에 도달했습니다.",
+                        "추가 온도 제어가 가능하도록 [냉각수 제어 칩]을 획득했습니다."
+                    ],
+                    hard: [
+                        "NOVA: 기울기 계산 분석 성공! 펌프 출력이 임계값에 맞춰졌습니다.",
+                        "최종 냉각 안전을 보장하는 [냉각수 제어 칩]을 입수했습니다."
+                    ]
+                },
+                itemToReward: { name: "냉각수 제어 칩", icon: SVGS.chip, tooltip: "원자로 냉각 장치의 상태 그래프 분석 및 작동 매개변수를 제어하는 칩" },
+                itemToUse: "마스터 액세스 키",
+                hints: {
+                    easy: "그래프의 선이 아래로 내려가는(오른쪽 아래 방향) 구간을 찾아서 터치하세요.",
+                    medium: "그래프가 가로로 평평한(y값의 변화가 없는) 구간을 찾아서 선택하세요.",
+                    hard: "가장 가파르게 올라가는 선을 찾으십시오. (기울기 = 세로 증가량 / 가로 증가량) 공식을 이용해 보세요."
+                },
+                generateMissionData: function(difficulty, randomize) {
+                    let points = [{x:-5, y:-2}, {x:-2, y:2}, {x:1, y:2}, {x:3, y:-3}, {x:5, y:4}];
+                    if (randomize) {
+                        points = [];
+                        let curX = -5;
+                        let curY = Math.floor(Math.random() * 5) - 2;
+                        points.push({x: curX, y: curY});
+                        for(let i=0; i<4; i++) {
+                            curX += Math.floor(Math.random() * 2) + 2;
+                            curY = Math.floor(Math.random() * 9) - 4;
+                            points.push({x: Math.min(5, curX), y: curY});
+                            if (curX >= 5) break;
+                        }
+                        if (points[points.length-1].x < 5) {
+                            points.push({x: 5, y: Math.floor(Math.random() * 9) - 4});
+                        }
+                    }
+                    let segments = [];
+                    for(let i=0; i<points.length-1; i++) {
+                        let p1 = points[i];
+                        let p2 = points[i+1];
+                        let slope = (p2.y - p1.y) / (p2.x - p1.x);
+                        let type = 'constant';
+                        if (slope > 0) type = 'increase';
+                        if (slope < 0) type = 'decrease';
+                        segments.push({
+                            index: i,
+                            p1: p1,
+                            p2: p2,
+                            slope: slope,
+                            type: type
+                        });
+                    }
+                    return { points: points, segments: segments };
+                }
+            },
+            {
+                id: "m6",
+                name: "ZONE 6: 메인 엔진 연료 주입",
+                objective: "정비례 식 y = ax를 파악하여 엔진 목표 출력(y)을 얻기 위해 주입해야 하는 연료량(x)을 구하십시오.",
+                npcName: "NOVA",
+                introDialogs: {
+                    easy: [
+                        "NOVA: 탈출선 엔진 시동을 켜려면 목표 출력이 필요합니다.",
+                        "연료량(x)과 엔진출력(y)은 정비례(y = ax) 관계입니다.",
+                        "연료 1통당 출력이 일정량 상승합니다. 화면에 제공된 식을 기반으로 목표 출력을 위한 연료량을 입력하세요."
+                    ],
+                    medium: [
+                        "NOVA: 해커 X가 밸브 출력 장치에 왜곡 장치를 걸었습니다.",
+                        "화면의 표에 제시된 x와 y의 대응 값을 보고 비례상수 a를 찾아내십시오. 목표 출력이 주어집니다."
+                    ],
+                    hard: [
+                        "해커 X: '너희들이 정비례 그래프 상의 격자점을 정확히 읽어낼 수 있겠느냐?'",
+                        "NOVA: 그래프선 위에 표시된 점의 좌표를 통해 정비례 관계식을 직접 도출하고, 목표 출력을 위한 정밀 연료량을 주입하십시오."
+                    ]
+                },
+                successDialogs: {
+                    easy: [
+                        "NOVA: 엔진 시동 완료! 시동음이 경쾌하게 들립니다.",
+                        "연료 제어 밸브의 핵심 모듈인 [연료 인젝터]를 확보했습니다."
+                    ],
+                    medium: [
+                        "NOVA: 정비례 계수를 계산하여 연료 밸브를 성공적으로 동기화했습니다.",
+                        "부스터 연료 제어가 가능한 [연료 인젝터]를 획득했습니다."
+                    ],
+                    hard: [
+                        "NOVA: 완벽한 정비례 해석입니다! 엔진 출력이 최대 효율 궤도에 올라섰습니다.",
+                        "초정밀 출력을 위한 핵심 장비 [연료 인젝터]를 입수했습니다."
+                    ]
+                },
+                itemToReward: { name: "연료 인젝터", icon: SVGS.injector, tooltip: "탈출선 메인 엔진에 정비례 공식에 맞춰 가압 연료를 정밀 분사하는 모듈" },
+                itemToUse: "냉각수 제어 칩",
+                hints: {
+                    easy: "정비례 공식은 y = ax입니다. y가 목표 출력이고 주어진 1통당 출력 수치가 a입니다. x = y / a로 구할 수 있습니다.",
+                    medium: "표에서 x가 2일 때 y가 6이라면, a는 y/x = 3이 됩니다. 목표 출력 y에 맞춰 x = y / a를 계산하세요.",
+                    hard: "그래프 선이 지나는 점 중 격자에 딱 맞아떨어지는 점 (x, y)를 찾으세요. y / x 값을 계산한 것이 비례상수 a입니다."
+                },
+                generateMissionData: function(difficulty, randomize) {
+                    let a = 3;
+                    let targetX = 4;
+                    if (randomize) {
+                        if (difficulty === 'easy') {
+                            a = Math.floor(Math.random() * 3) + 2;
+                            targetX = Math.floor(Math.random() * 4) + 2;
+                        } else if (difficulty === 'medium') {
+                            a = Math.floor(Math.random() * 4) + 3;
+                            targetX = Math.floor(Math.random() * 4) + 2;
+                        } else {
+                            a = (Math.floor(Math.random() * 4) + 3) * 0.5;
+                            targetX = Math.floor(Math.random() * 5) + 3;
+                        }
+                    }
+                    let targetY = a * targetX;
+                    return { a: a, targetX: targetX, targetY: targetY };
+                }
+            },
+            {
+                id: "m7",
+                name: "ZONE 7: 도킹 해치 압력 조절",
+                objective: "반비례 관계 y = a/x를 활용하여 해치의 압력(y)이 안전 목표치에 수렴하도록 해치의 부피(x)를 조절하십시오.",
+                npcName: "NOVA",
+                introDialogs: {
+                    easy: [
+                        "NOVA: 탈출선과 안전하게 도킹하려면 해치 안쪽의 기압을 맞춰야 합니다.",
+                        "기압(y)과 부피(x)는 반비례(y = a/x) 관계에 있습니다.",
+                        "목표 기압이 붉은선으로 표시됩니다. 슬라이더를 통해 부피를 조절해 기압을 목표치에 맞추어 보십시오."
+                    ],
+                    medium: [
+                        "NOVA: 해커 X가 기압 센서 계기판을 숨겼지만, 반비례 공식의 상수 a(부피와 기압의 곱)는 일정합니다.",
+                        "제공된 데이터를 통해 반비례 상수 a를 알아내고, 목표 압력을 생성할 부피 값을 산출하십시오."
+                    ],
+                    hard: [
+                        "해커 X: '반비례 곡선 위의 임의의 값을 지워두었지. 수동 조절 장치도 작동 제한을 걸어두었다!'",
+                        "NOVA: 곡선 그래프의 좌표를 복원하여 반비례 상수를 계산하고, 압력을 목표 안전 기압에 동기화하십시오."
+                    ]
+                },
+                successDialogs: {
+                    easy: [
+                        "NOVA: 압력 균형 조절 완료! 해치의 외부 보호 셔터가 개방되었습니다.",
+                        "도킹 연결을 지원하는 [도킹 어댑터]를 획득했습니다."
+                    ],
+                    medium: [
+                        "NOVA: 반비례 법칙을 정확하게 연동하여 해치의 가스 밀도를 맞추었습니다.",
+                        "안전 연결 장치 [도킹 어댑터]를 입수했습니다."
+                    ],
+                    hard: [
+                        "NOVA: 기적적으로 기압 조절 밸브의 한계점을 극복하고 도킹 잠금 링을 체결했습니다!",
+                        "최종 탈출 통로 개방용 [도킹 어댑터]를 획득했습니다."
+                    ]
+                },
+                itemToReward: { name: "도킹 어댑터", icon: SVGS.adapter, tooltip: "탈출선과의 통로 격벽 기압을 물리적으로 결합해 주는 도킹 전용 보조 장치" },
+                itemToUse: "연료 인젝터",
+                hints: {
+                    easy: "부피 슬라이더를 우측으로 늘려서 부피(x)를 키우면 압력(y)은 아래로 내려가며 반비례 곡선을 그립니다. 빨간선과 만나는 위치로 맞추세요.",
+                    medium: "부피(x)와 기압(y)의 곱은 항상 a로 일정합니다. x * y = a 임을 이용해 목표 기압에 대응하는 부피 값을 구해보세요.",
+                    hard: "반비례 상수 a를 먼저 구해야 합니다. x * y = a 에서 기압 수평선 목표 y가 주어졌으니, x = a / y 공식을 활용해 대입하세요."
+                },
+                generateMissionData: function(difficulty, randomize) {
+                    let a = 12;
+                    let targetY = 3;
+                    if (randomize) {
+                        const aPool = [12, 16, 20, 24];
+                        a = aPool[Math.floor(Math.random() * aPool.length)];
+                        let divisors = [];
+                        for(let i=2; i<=a/2; i++) {
+                            if (a % i === 0) divisors.push(i);
+                        }
+                        if (divisors.length > 0) {
+                            targetY = divisors[Math.floor(Math.random() * divisors.length)];
+                        } else {
+                            targetY = 4;
+                        }
+                    }
+                    let targetX = a / targetY;
+                    return { a: a, targetX: targetX, targetY: targetY };
+                }
+            },
+            {
+                id: "m8",
+                name: "ZONE 8: 탈출선 유도 지도 복원",
+                objective: "네 가지 전력 유도 칩을 사분면 성격에 알맞은 좌표 위치에 드래그하여 배치하십시오.",
+                npcName: "NOVA",
+                introDialogs: {
+                    easy: [
+                        "마지막 탈출 통제실에 진입했습니다. [도킹 어댑터]를 꽂아 기기를 활성화해 주세요.",
+                        "유도 안테나 신호를 네 가지 사분면 속성에 맞추어 제자리에 드래그하여 정밀 배치해야 합니다.",
+                        "x와 y의 부호를 살피고 제시되는 사분면에 정확하게 칩을 올려놓아 신호 복구를 완료해 보십시오."
+                    ],
+                    medium: [
+                        "탈출 통제실에 도달했으나, 해커 X가 송수신 레이더 안테나 좌표를 무차별 Jamming(교란)해 놓았습니다. [도킹 어댑터]를 장착하여 제어 권한을 뺏으십시오!",
+                        "네 종류 of 통신 모듈 안테나 칩을 각각 조건(예: x < 0, y < 0 등)에 맞는 사분면 격자 좌표 위에 드래그하여 정확하게 조율해야 합니다.",
+                        "해커 X의 방해 전파 무력화 완료! 탈출선 신호 복구율이 100%가 되었습니다."
+                    ],
+                    hard: [
+                        "경보! 탈출 통제실 전역이 차단되고 있습니다! 1초라도 빨리 [도킹 어댑터]를 연결하고 해킹 우회 격자를 구성하십시오!",
+                        "해커 X: '도킹 시스템을 아예 궤도에서 이탈시켜 주마! 축 대칭 변환 조건도 이해하지 못하는 수준이라면 여기서 최후를 맞이하겠지!'",
+                        "NOVA: '안테나 칩들을 단순 배치가 아닌, 고도의 x축/y축 대칭 조건과 복합 부등식 조건의 사분면으로 전송시켜야 합니다. 극한의 상황에서도 침착하십시오!'"
+                    ]
+                },
+                successDialogs: {
+                    easy: [
+                        "유도 복구 완료! 탈출선의 도킹 통로가 개방됩니다.",
+                        "최종 게이트 락 해제 공식이 담긴 [비상 탈출 코드 카드]를 장착했습니다. 다음을 누르고 암호 입력을 시작하십시오!"
+                    ],
+                    medium: [
+                        "해커 X의 방해 전파 무력화 완료! 탈출선 신호 복구율이 100%가 되었습니다.",
+                        "해커 X의 최종 방화벽을 뚫을 핵심 암호 공식 카드인 [비상 탈출 코드 카드]를 획득했습니다. 다음 단계로 넘어가십시오!"
+                    ],
+                    hard: [
+                        "안테나 정밀 궤도 제어 성공! 탈출선이 연구소 외벽에 극적으로 도킹을 완료했습니다.",
+                        "최종 폭발 락을 무효화할 해독 정보 카드 [비상 탈출 코드 카드]를 획득했습니다. 이제 최종 단말기에 암호를 입력하십시오!"
+                    ]
+                },
+                itemToReward: { name: "비상 탈출 코드 카드", icon: SVGS.card, tooltip: "최종 잠금 해제에 필요한 수학적 연산 공식과 마스터 비밀코드 힌트가 들어있습니다." },
+                itemToUse: "도킹 어댑터",
+                hints: {
+                    easy: "제1사분면(+,+), 제2사분면(-,+), 제3사분면(-,-), 제4사분면(+,-)의 위치를 확인하세요.",
+                    medium: "각 칩을 조건에 맞는 영역으로 가져다 놓아야 합니다. 드래그 앤 드롭 또는 타겟 클릭 방식을 이용하세요.",
+                    hard: "축 대칭(x축 대칭은 y부호 반대, y축 대칭은 x부호 반대)의 성질을 가진 칩 배치 미션입니다."
+                },
+                generateMissionData: function(difficulty, randomize) {
+                    const suffixA = difficulty === 'hard' ? "" : " (제1사분면)";
+                    const suffixB = difficulty === 'hard' ? "" : " (제2사분면)";
+                    const suffixC = difficulty === 'hard' ? "" : " (제3사분면)";
+                    const suffixD = difficulty === 'hard' ? "" : " (제4사분면)";
+                    
+                    const chips = [
+                        { id: "chip-a", name: "송신기 Alpha", desc: "x > 0, y > 0 인 지역" + suffixA, check: (x, y) => x > 0 && y > 0 },
+                        { id: "chip-b", name: "수신기 Beta", desc: "x < 0, y > 0 인 지역" + suffixB, check: (x, y) => x < 0 && y > 0 },
+                        { id: "chip-c", name: "필터 Gamma", desc: "x < 0, y < 0 인 지역" + suffixC, check: (x, y) => x < 0 && y < 0 },
+                        { id: "chip-d", name: "서브 Orion", desc: "x > 0, y < 0 인 지역" + suffixD, check: (x, y) => x > 0 && y < 0 }
+                    ];
+                    return { chips: chips };
+                }
+            }
+        ];니, 마우스로 선을 차례대로 이어 드로잉 회로를 완성하세요."
                     ],
                     medium: [
                         "발전실에 도달했으나, 이미 전력선 피드백 노드가 모두 파열되었습니다. [에너지 코어]를 시급히 도킹시켜 주십시오.",
@@ -1839,6 +2140,34 @@
             }
 
             loadSettings() {
+                const SAVE_VERSION = 'v2';
+                const savedVersion = localStorage.getItem('ai_lab_escape_version');
+                if (savedVersion !== SAVE_VERSION) {
+                    localStorage.removeItem('ai_lab_escape_save');
+                    localStorage.setItem('ai_lab_escape_version', SAVE_VERSION);
+                    this.currentMissionIndex = 0;
+                    this.difficulty = 'easy';
+                    this.useTimer = true;
+                    this.timerLimit = 1200;
+                    this.allowHint = true;
+                    this.randomize = true;
+                    this.inventory = [];
+                    this.achievements = [];
+                    this.timeElapsed = 0;
+                    this.failCount = 0;
+                    this.coordTheme = 'dark';
+                    this.session = {
+                        sessionId: "",
+                        studentNo: "",
+                        studentName: "",
+                        startedAt: null,
+                        completedLevels: [],
+                        currentRoundScore: { wrongCount: 0, hintCount: 0 },
+                        scores: {}
+                    };
+                    this.saveLocal();
+                }
+
                 const saved = localStorage.getItem('ai_lab_escape_save');
                 if (saved) {
                     try {
@@ -2078,7 +2407,7 @@
                         if (m) {
                             document.getElementById('hint-text-span').innerText = m.hints[this.difficulty];
                             hintBox.style.display = 'block';
-                        } else if (this.currentMissionIndex === 5) {
+                        } else if (this.currentMissionIndex === 8) {
                             // Final mission hint
                             const saved = localStorage.getItem('ai_lab_escape_save');
                             let targetWord = "GRID";
@@ -2088,7 +2417,7 @@
                                     targetWord = parsed.m2Word || "GRID";
                                 } catch(e){}
                             }
-                            document.getElementById('hint-text-span').innerText = `최종 탈출 암호는 [보안 단어] + [복구 구역 수(5)] 입니다. 복구된 보안 단어는 '${targetWord}' 이며, 최종 비밀번호는 '${targetWord}5' 입니다.`;
+                            document.getElementById('hint-text-span').innerText = `최종 탈출 암호는 [보안 단어] + [복구 구역 수(8)] 입니다. 복구된 보안 단어는 '${targetWord}' 이며, 최종 비밀번호는 '${targetWord}8' 입니다.`;
                             hintBox.style.display = 'block';
                         }
                     }
@@ -2623,8 +2952,8 @@
                     diffTag.style.boxShadow = diffGlows[this.difficulty];
                 }
 
-                // If finished all 5 missions, show final gate code mission
-                if (this.currentMissionIndex >= 5) {
+                // If finished all 8 missions, show final gate code mission
+                if (this.currentMissionIndex >= 8) {
                     this.setupFinalMission();
                     return;
                 }
@@ -2632,7 +2961,7 @@
                 const m = MISSION_CONFIG[this.currentMissionIndex];
                 
                 // HUD update
-                const recoveryRate = Math.round((this.currentMissionIndex / 6) * 100);
+                const recoveryRate = Math.round((this.currentMissionIndex / 9) * 100);
                 document.getElementById('game-progress-fill').style.width = `${recoveryRate}%`;
                 document.getElementById('progress-text').innerText = `${recoveryRate}%`;
                 document.getElementById('current-zone-name').innerText = m.name;
@@ -2721,6 +3050,15 @@
                     case 4:
                         this.setupMission5();
                         break;
+                    case 5:
+                        this.setupMission6();
+                        break;
+                    case 6:
+                        this.setupMission7();
+                        break;
+                    case 7:
+                        this.setupMission8();
+                        break;
                 }
             }
 
@@ -2744,7 +3082,16 @@
                     case 4:
                         isCorrect = this.validateMission5();
                         break;
-                    case 5: // Final
+                    case 5:
+                        isCorrect = this.validateMission6();
+                        break;
+                    case 6:
+                        isCorrect = this.validateMission7();
+                        break;
+                    case 7:
+                        isCorrect = this.validateMission8();
+                        break;
+                    case 8: // Final
                         isCorrect = this.validateFinalMission();
                         break;
                 }
@@ -2762,7 +3109,7 @@
                 // 실시간 미션 클리어 정보 전송
                 this.saveRemote({ action: "mission_success", missionIndex: this.currentMissionIndex + 1 });
 
-                if (this.currentMissionIndex === 5) {
+                if (this.currentMissionIndex === 8) {
                     // Final gate pass success -> Trigger Ending!
                     this.addAchievement("🏆 연구소 탈출 완료");
                     this.showEndingScreen();
@@ -2778,7 +3125,10 @@
                     if (this.currentMissionIndex === 1) this.addAchievement("🕵 암호 분석 전문가");
                     if (this.currentMissionIndex === 2) this.addAchievement("🛡 레이저 생존자");
                     if (this.currentMissionIndex === 3) this.addAchievement("⚡ 전력 엔지니어");
-                    if (this.currentMissionIndex === 4) this.addAchievement("📡 유도 신호 관제사");
+                    if (this.currentMissionIndex === 4) this.addAchievement("📊 그래프 분석가");
+                    if (this.currentMissionIndex === 5) this.addAchievement("📈 정비례 마스터");
+                    if (this.currentMissionIndex === 6) this.addAchievement("📉 반비례 마스터");
+                    if (this.currentMissionIndex === 7) this.addAchievement("📡 유도 신호 관제사");
 
                     const successDialogs = this.getDifficultyDialogs(m.successDialogs);
                     this.speak(m.npcName, "🤖", successDialogs, () => {
@@ -3205,17 +3555,539 @@
             // ==========================================
             // 9. MISSION 5: 최종 유도망 복원 (사분면 칩 배치)
             // ==========================================
+            // ==========================================
+            // 11. MISSION 5: 냉각수 펌프 로그 분석 (그래프 해석)
+            // ==========================================
             setupMission5() {
                 const svg = document.getElementById('coordinate-svg');
                 const uiArea = document.getElementById('mission-specific-ui');
                 const data = this.currentMissionData;
+                this.userInputs = -1; // selected segment index
 
-                // userInputs will store mapping: { "chip-a": {x, y}, "chip-b": {x,y}... }
+                const center = 250;
+                const step = 50;
+
+                // Clear old visuals
+                const oldVisuals = svg.querySelectorAll('.m5-line, .m5-dot, .m5-overlay');
+                oldVisuals.forEach(el => svg.removeChild(el));
+
+                // Draw segments
+                data.segments.forEach((seg, idx) => {
+                    const x1 = center + seg.p1.x * step;
+                    const y1 = center - seg.p1.y * step;
+                    const x2 = center + seg.p2.x * step;
+                    const y2 = center - seg.p2.y * step;
+
+                    // Visible line
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", x1);
+                    line.setAttribute("y1", y1);
+                    line.setAttribute("x2", x2);
+                    line.setAttribute("y2", y2);
+                    line.setAttribute("stroke", "var(--neon-cyan)");
+                    line.setAttribute("stroke-width", "3.5");
+                    line.setAttribute("class", "m5-line");
+                    line.setAttribute("id", `m5-line-${idx}`);
+                    svg.appendChild(line);
+
+                    // Click overlay
+                    const overlay = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    overlay.setAttribute("x1", x1);
+                    overlay.setAttribute("y1", y1);
+                    overlay.setAttribute("x2", x2);
+                    overlay.setAttribute("y2", y2);
+                    overlay.setAttribute("stroke", "transparent");
+                    overlay.setAttribute("stroke-width", "24");
+                    overlay.setAttribute("class", "m5-overlay");
+                    overlay.setAttribute("style", "cursor: pointer;");
+                    
+                    const onClick = () => {
+                        this.audio.playSFX('click');
+                        selectSegment(idx);
+                    };
+                    overlay.addEventListener('click', onClick);
+                    overlay.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        onClick();
+                    });
+                    svg.appendChild(overlay);
+                });
+
+                // Draw points
+                data.points.forEach((p) => {
+                    const tx = center + p.x * step;
+                    const ty = center - p.y * step;
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", tx);
+                    circle.setAttribute("cy", ty);
+                    circle.setAttribute("r", 6);
+                    circle.setAttribute("fill", "#fff");
+                    circle.setAttribute("stroke", "var(--neon-cyan)");
+                    circle.setAttribute("stroke-width", "1.5");
+                    circle.setAttribute("class", "m5-dot");
+                    svg.appendChild(circle);
+                });
+
+                const selectSegment = (idx) => {
+                    this.userInputs = idx;
+                    svg.querySelectorAll('.m5-line').forEach((line, i) => {
+                        if (i === idx) {
+                            line.setAttribute("stroke", "var(--neon-yellow)");
+                            line.setAttribute("stroke-width", "5");
+                            line.setAttribute("style", "filter: drop-shadow(0 0 6px var(--neon-yellow));");
+                        } else {
+                            line.setAttribute("stroke", "var(--neon-cyan)");
+                            line.setAttribute("stroke-width", "3.5");
+                            line.setAttribute("style", "");
+                        }
+                    });
+                    document.getElementById('submit-mission-btn').style.display = 'block';
+                    updateUIStatus(idx);
+                };
+
+                const updateUIStatus = (idx) => {
+                    const seg = data.segments[idx];
+                    let text = `선택된 구간: 없음`;
+                    if (seg) {
+                        text = `선택된 구간: <strong>${idx + 1}번 구간</strong> (x: ${seg.p1.x} ~ ${seg.p2.x})`;
+                    }
+                    document.getElementById('m5-status').innerHTML = text;
+                };
+
+                let targetDesc = "";
+                if (this.difficulty === 'easy') targetDesc = "냉각수 수위가 <strong>감소(감소 구간)</strong>하고 있는 선분을 찾아서 클릭하세요.";
+                else if (this.difficulty === 'medium') targetDesc = "냉각수 수위가 <strong>일정하게 유지(변화 없음)</strong>되는 선분을 찾아서 클릭하세요.";
+                else targetDesc = "냉각수 수위가 <strong>가장 빠르게 증가(기울기가 최대)</strong>하는 선분을 찾아서 클릭하세요.";
+
+                uiArea.innerHTML = `
+                    <div style="font-size: 0.9rem; line-height: 1.5; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid rgba(0,240,255,0.15)">
+                        <div class="neon-text-cyan" style="font-weight: bold; margin-bottom: 5px;">구간 데이터 분석 지침:</div>
+                        <p style="font-size: 0.85rem; opacity: 0.9;">${targetDesc}</p>
+                    </div>
+                    <div id="m5-status" class="neon-text-yellow" style="text-align: center; font-size: 0.95rem; font-family: var(--font-cyber); margin-top: 10px;">
+                        분석할 구간을 그래프에서 클릭해 주세요.
+                    </div>
+                `;
+            }
+
+            validateMission5() {
+                if (this.userInputs === -1) return false;
+                const data = this.currentMissionData;
+                const seg = data.segments[this.userInputs];
+                if (!seg) return false;
+
+                if (this.difficulty === 'easy') {
+                    return seg.type === 'decrease';
+                } else if (this.difficulty === 'medium') {
+                    return seg.type === 'constant';
+                } else {
+                    let maxSlope = -Infinity;
+                    data.segments.forEach(s => {
+                        if (s.slope > maxSlope) maxSlope = s.slope;
+                    });
+                    return Math.abs(seg.slope - maxSlope) < 0.01;
+                }
+            }
+
+            // ==========================================
+            // 12. MISSION 6: 메인 엔진 연료 주입 (정비례)
+            // ==========================================
+            setupMission6() {
+                const svg = document.getElementById('coordinate-svg');
+                const uiArea = document.getElementById('mission-specific-ui');
+                const data = this.currentMissionData;
+
+                const center = 250;
+                const step = 50;
+
+                // Clear old visuals
+                const oldVisuals = svg.querySelectorAll('.m6-line, .m6-dot, .m6-goal');
+                oldVisuals.forEach(el => svg.removeChild(el));
+
+                // Draw y = ax
+                let xStart = -5, yStart = -5 * data.a;
+                let xEnd = 5, yEnd = 5 * data.a;
+
+                if (yStart < -5) { yStart = -5; xStart = -5 / data.a; }
+                if (yStart > 5) { yStart = 5; xStart = 5 / data.a; }
+                if (yEnd > 5) { yEnd = 5; xEnd = 5 / data.a; }
+                if (yEnd < -5) { yEnd = -5; xEnd = -5 / data.a; }
+
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", center + xStart * step);
+                line.setAttribute("y1", center - yStart * step);
+                line.setAttribute("x2", center + xEnd * step);
+                line.setAttribute("y2", center - yEnd * step);
+                line.setAttribute("stroke", "var(--neon-cyan)");
+                line.setAttribute("stroke-width", "3");
+                line.setAttribute("class", "m6-line");
+                svg.appendChild(line);
+
+                // Draw target limit marker
+                const goal = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                goal.setAttribute("x1", 0);
+                goal.setAttribute("y1", center - data.targetY * step);
+                goal.setAttribute("x2", 500);
+                goal.setAttribute("y2", center - data.targetY * step);
+                goal.setAttribute("stroke", "var(--neon-magenta)");
+                goal.setAttribute("stroke-width", "2");
+                goal.setAttribute("stroke-dasharray", "5 3");
+                goal.setAttribute("class", "m6-goal");
+                svg.appendChild(goal);
+
+                const goalText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                goalText.setAttribute("x", 480);
+                goalText.setAttribute("y", center - data.targetY * step - 8);
+                goalText.setAttribute("fill", "var(--neon-magenta)");
+                goalText.setAttribute("class", "tick-label m6-goal");
+                goalText.setAttribute("style", "font-size: 10px; font-weight: bold; text-anchor: end;");
+                goalText.textContent = `목표 출력: ${data.targetY}`;
+                svg.appendChild(goalText);
+
+                // User controllable point
+                const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                dot.setAttribute("cx", center);
+                dot.setAttribute("cy", center);
+                dot.setAttribute("r", 7);
+                dot.setAttribute("fill", "var(--neon-green)");
+                dot.setAttribute("stroke", "#fff");
+                dot.setAttribute("stroke-width", "1.5");
+                dot.setAttribute("class", "m6-dot");
+                dot.setAttribute("style", "filter: drop-shadow(0 0 5px var(--neon-green));");
+                svg.appendChild(dot);
+
+                this.userInputs = 0; // x chosen
+
+                const updateOutput = (val) => {
+                    this.userInputs = val;
+                    const yVal = data.a * val;
+                    
+                    // Clamp visual point coordinates
+                    const dotX = Math.min(5, Math.max(-5, val));
+                    const dotY = Math.min(5, Math.max(-5, yVal));
+
+                    dot.setAttribute("cx", center + dotX * step);
+                    dot.setAttribute("cy", center - dotY * step);
+                    
+                    document.getElementById('m6-val-x').innerText = val.toFixed(1);
+                    document.getElementById('m6-val-y').innerText = yVal.toFixed(1);
+
+                    const percent = Math.min(100, Math.max(0, (yVal / data.targetY) * 100));
+                    document.getElementById('m6-gauge-fill').style.height = `${percent}%`;
+
+                    if (Math.abs(yVal - data.targetY) < 0.05) {
+                        document.getElementById('m6-gauge-fill').style.background = 'var(--neon-green)';
+                        document.getElementById('m6-gauge-fill').style.boxShadow = '0 0 10px var(--neon-green)';
+                    } else {
+                        document.getElementById('m6-gauge-fill').style.background = 'var(--neon-cyan)';
+                        document.getElementById('m6-gauge-fill').style.boxShadow = '0 0 10px var(--neon-cyan)';
+                    }
+                };
+
+                let controlHtml = "";
+                if (this.difficulty === 'easy') {
+                    controlHtml = `
+                        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 0.85rem; color: var(--neon-cyan);">연료 주입량 (x) 조절:</label>
+                            <input type="range" id="m6-slider" min="0" max="5" step="1" value="0" style="width: 100%;">
+                        </div>
+                    `;
+                } else if (this.difficulty === 'medium') {
+                    controlHtml = `
+                        <div style="font-size: 0.8rem; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: center; font-family: var(--font-mono);">
+                                <tr style="border-bottom: 1px solid rgba(0,240,255,0.2);">
+                                    <th style="padding: 4px; color: var(--neon-cyan);">연료(x)</th>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <th style="padding: 4px; color: var(--neon-cyan);">출력(y)</th>
+                                    <td>${data.a}</td>
+                                    <td>${data.a * 2}</td>
+                                    <td>${data.a * 3}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 0.85rem; color: var(--neon-cyan);">연료 주입량 (x) 조절:</label>
+                            <input type="range" id="m6-slider" min="0" max="5" step="1" value="0" style="width: 100%;">
+                        </div>
+                    `;
+                } else {
+                    const refX1 = 2;
+                    const refY1 = data.a * refX1;
+                    const refDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    refDot.setAttribute("cx", center + refX1 * step);
+                    refDot.setAttribute("cy", center - refY1 * step);
+                    refDot.setAttribute("r", 5);
+                    refDot.setAttribute("fill", "var(--neon-yellow)");
+                    refDot.setAttribute("class", "m6-dot");
+                    svg.appendChild(refDot);
+
+                    const refText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    refText.setAttribute("x", center + refX1 * step + 8);
+                    refText.setAttribute("y", center - refY1 * step + 4);
+                    refText.setAttribute("fill", "var(--neon-yellow)");
+                    refText.setAttribute("class", "tick-label m6-dot");
+                    refText.setAttribute("style", "font-size: 10px; font-weight: bold; text-anchor: start;");
+                    refText.textContent = `(${refX1}, ${refY1})`;
+                    svg.appendChild(refText);
+
+                    controlHtml = `
+                        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 0.85rem; color: var(--neon-cyan);">연료량(x) 직접 산출 후 입력:</label>
+                            <input type="number" id="m6-input" min="0" max="10" step="0.1" value="0" style="background: rgba(0,0,0,0.5); border: 1px solid var(--neon-cyan); color: #fff; padding: 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 1.1rem; text-align: center;">
+                        </div>
+                    `;
+                }
+
+                uiArea.innerHTML = `
+                    <div style="font-size: 0.85rem; line-height: 1.4; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid rgba(0,240,255,0.15)">
+                        <div class="neon-text-cyan" style="font-weight: bold;">엔진 출력 조절 시스템:</div>
+                        <p style="font-size: 0.8rem; opacity: 0.9;">관계식: y = ${this.difficulty === 'easy' ? data.a : 'a'}x (x: 연료량, y: 엔진출력)</p>
+                        <p style="font-size: 0.8rem; color: var(--neon-magenta);">목표 출력(y) = <strong>${data.targetY}</strong></p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 16px; align-items: center; margin-top: 10px; justify-content: center;">
+                        <div style="width: 24px; height: 80px; background: rgba(255,255,255,0.1); border: 1px solid var(--neon-cyan); border-radius: 4px; overflow: hidden; display: flex; align-items: flex-end;">
+                            <div id="m6-gauge-fill" style="width: 100%; height: 0%; background: var(--neon-cyan); transition: height 0.1s ease;"></div>
+                        </div>
+                        <div style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6;">
+                            연료(x): <span id="m6-val-x" class="neon-text-green">0.0</span> 통<br>
+                            출력(y): <span id="m6-val-y" class="neon-text-cyan">0.0</span> kW
+                        </div>
+                    </div>
+                    ${controlHtml}
+                `;
+
+                const slider = document.getElementById('m6-slider');
+                if (slider) {
+                    slider.addEventListener('input', (e) => {
+                        updateOutput(parseFloat(e.target.value));
+                    });
+                }
+                const input = document.getElementById('m6-input');
+                if (input) {
+                    input.addEventListener('input', (e) => {
+                        updateOutput(parseFloat(e.target.value) || 0);
+                    });
+                }
+
+                document.getElementById('submit-mission-btn').style.display = 'block';
+            }
+
+            validateMission6() {
+                const data = this.currentMissionData;
+                return Math.abs(data.a * this.userInputs - data.targetY) < 0.05;
+            }
+
+            // ==========================================
+            // 13. MISSION 7: 도킹 해치 압력 조절 (반비례)
+            // ==========================================
+            setupMission7() {
+                const svg = document.getElementById('coordinate-svg');
+                const uiArea = document.getElementById('mission-specific-ui');
+                const data = this.currentMissionData;
+
+                const center = 250;
+                const step = 50;
+
+                // Clear old visuals
+                const oldVisuals = svg.querySelectorAll('.m7-line, .m7-dot, .m7-goal, .m7-curve');
+                oldVisuals.forEach(el => svg.removeChild(el));
+
+                // Draw curve y = a/x (x > 0)
+                let pathD = "";
+                for(let xVal = 0.5; xVal <= 5; xVal += 0.05) {
+                    const yVal = data.a / xVal;
+                    if (yVal <= 5) {
+                        const px = center + xVal * step;
+                        const py = center - yVal * step;
+                        if (pathD === "") {
+                            pathD = `M ${px} ${py}`;
+                        } else {
+                            pathD += ` L ${px} ${py}`;
+                        }
+                    }
+                }
+
+                const curve = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                curve.setAttribute("d", pathD);
+                curve.setAttribute("fill", "none");
+                curve.setAttribute("stroke", "var(--neon-cyan)");
+                curve.setAttribute("stroke-width", "3");
+                curve.setAttribute("class", "m7-curve");
+                svg.appendChild(curve);
+
+                // Draw goal line y = targetY
+                const goal = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                goal.setAttribute("x1", 0);
+                goal.setAttribute("y1", center - data.targetY * step);
+                goal.setAttribute("x2", 500);
+                goal.setAttribute("y2", center - data.targetY * step);
+                goal.setAttribute("stroke", "var(--neon-magenta)");
+                goal.setAttribute("stroke-width", "2");
+                goal.setAttribute("stroke-dasharray", "5 3");
+                goal.setAttribute("class", "m7-goal");
+                svg.appendChild(goal);
+
+                const goalText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                goalText.setAttribute("x", 480);
+                goalText.setAttribute("y", center - data.targetY * step - 8);
+                goalText.setAttribute("fill", "var(--neon-magenta)");
+                goalText.setAttribute("class", "tick-label m7-goal");
+                goalText.setAttribute("style", "font-size: 10px; font-weight: bold; text-anchor: end;");
+                goalText.textContent = `목표 기압: ${data.targetY}`;
+                svg.appendChild(goalText);
+
+                // Point on curve
+                const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                dot.setAttribute("cx", center + 1 * step);
+                dot.setAttribute("cy", center - (data.a / 1) * step);
+                dot.setAttribute("r", 7);
+                dot.setAttribute("fill", "var(--neon-yellow)");
+                dot.setAttribute("stroke", "#fff");
+                dot.setAttribute("stroke-width", "1.5");
+                dot.setAttribute("class", "m7-dot");
+                dot.setAttribute("style", "filter: drop-shadow(0 0 5px var(--neon-yellow));");
+                svg.appendChild(dot);
+
+                this.userInputs = 1; // initial x
+
+                const updateOutput = (val) => {
+                    this.userInputs = val;
+                    const yVal = data.a / val;
+
+                    const dotX = Math.min(5, Math.max(0.2, val));
+                    const dotY = Math.min(5, Math.max(0.2, yVal));
+
+                    dot.setAttribute("cx", center + dotX * step);
+                    dot.setAttribute("cy", center - dotY * step);
+
+                    document.getElementById('m7-val-x').innerText = val.toFixed(1);
+                    document.getElementById('m7-val-y').innerText = yVal.toFixed(1);
+
+                    if (Math.abs(yVal - data.targetY) < 0.15) {
+                        dot.setAttribute("fill", "var(--neon-green)");
+                        dot.setAttribute("style", "filter: drop-shadow(0 0 8px var(--neon-green));");
+                    } else {
+                        dot.setAttribute("fill", "var(--neon-yellow)");
+                        dot.setAttribute("style", "filter: drop-shadow(0 0 5px var(--neon-yellow));");
+                    }
+                };
+
+                let controlHtml = "";
+                if (this.difficulty === 'easy') {
+                    controlHtml = `
+                        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 0.85rem; color: var(--neon-cyan);">해치 부피 (x) 조절:</label>
+                            <input type="range" id="m7-slider" min="1" max="10" step="0.2" value="1" style="width: 100%;">
+                        </div>
+                    `;
+                } else if (this.difficulty === 'medium') {
+                    controlHtml = `
+                        <div style="font-size: 0.8rem; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; margin-bottom: 8px;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: center; font-family: var(--font-mono);">
+                                <tr style="border-bottom: 1px solid rgba(0,240,255,0.2);">
+                                    <th style="padding: 4px; color: var(--neon-cyan);">부피(x)</th>
+                                    <td>2</td>
+                                    <td>4</td>
+                                    <td>${data.a / 2}</td>
+                                </tr>
+                                <tr>
+                                    <th style="padding: 4px; color: var(--neon-cyan);">기압(y)</th>
+                                    <td>${data.a / 2}</td>
+                                    <td>${data.a / 4}</td>
+                                    <td>2</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 0.85rem; color: var(--neon-cyan);">해치 부피 (x) 조절:</label>
+                            <input type="range" id="m7-slider" min="1" max="10" step="0.2" value="1" style="width: 100%;">
+                        </div>
+                    `;
+                } else {
+                    const refX1 = 2;
+                    const refY1 = data.a / refX1;
+                    const refDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    refDot.setAttribute("cx", center + refX1 * step);
+                    refDot.setAttribute("cy", center - refY1 * step);
+                    refDot.setAttribute("r", 5);
+                    refDot.setAttribute("fill", "var(--neon-yellow)");
+                    refDot.setAttribute("class", "m7-dot");
+                    svg.appendChild(refDot);
+
+                    const refText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    refText.setAttribute("x", center + refX1 * step + 8);
+                    refText.setAttribute("y", center - refY1 * step + 4);
+                    refText.setAttribute("fill", "var(--neon-yellow)");
+                    refText.setAttribute("class", "tick-label m7-dot");
+                    refText.setAttribute("style", "font-size: 10px; font-weight: bold; text-anchor: start;");
+                    refText.textContent = `(${refX1}, ${refY1})`;
+                    svg.appendChild(refText);
+
+                    controlHtml = `
+                        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                            <label style="font-size: 0.85rem; color: var(--neon-cyan);">부피(x) 직접 계산 후 입력:</label>
+                            <input type="number" id="m7-input" min="1" max="15" step="0.1" value="1" style="background: rgba(0,0,0,0.5); border: 1px solid var(--neon-cyan); color: #fff; padding: 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 1.1rem; text-align: center;">
+                        </div>
+                    `;
+                }
+
+                uiArea.innerHTML = `
+                    <div style="font-size: 0.85rem; line-height: 1.4; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid rgba(0,240,255,0.15)">
+                        <div class="neon-text-cyan" style="font-weight: bold;">기압 반비례 제어 시스템:</div>
+                        <p style="font-size: 0.8rem; opacity: 0.9;">관계식: y = ${this.difficulty === 'easy' ? data.a : 'a'}/x (x: 부피, y: 기압)</p>
+                        <p style="font-size: 0.8rem; color: var(--neon-magenta);">목표 기압(y) = <strong>${data.targetY}</strong></p>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px; align-items: center; margin-top: 10px; justify-content: center;">
+                        <div style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.5; text-align: center;">
+                            부피(x): <span id="m7-val-x" class="neon-text-green">1.0</span> L<br>
+                            기압(y): <span id="m7-val-y" class="neon-text-cyan">${(data.a / 1).toFixed(1)}</span> atm
+                        </div>
+                    </div>
+                    ${controlHtml}
+                `;
+
+                const slider = document.getElementById('m7-slider');
+                if (slider) {
+                    slider.addEventListener('input', (e) => {
+                        updateOutput(parseFloat(e.target.value));
+                    });
+                    updateOutput(1);
+                }
+                const input = document.getElementById('m7-input');
+                if (input) {
+                    input.addEventListener('input', (e) => {
+                        updateOutput(parseFloat(e.target.value) || 1);
+                    });
+                    updateOutput(1);
+                }
+
+                document.getElementById('submit-mission-btn').style.display = 'block';
+            }
+
+            validateMission7() {
+                const data = this.currentMissionData;
+                return Math.abs(data.a / this.userInputs - data.targetY) < 0.15;
+            }
+
+            // ==========================================
+            // 14. MISSION 8: 최종 유도망 복원 (사분면 칩 배치 - 기존 5단계)
+            // ==========================================
+            setupMission8() {
+                const svg = document.getElementById('coordinate-svg');
+                const uiArea = document.getElementById('mission-specific-ui');
+                const data = this.currentMissionData;
+
                 if (typeof this.userInputs !== 'object' || Array.isArray(this.userInputs)) {
                     this.userInputs = {};
                 }
 
-                // Currently selected chip to place
                 let selectedChipId = null;
 
                 const renderUI = () => {
@@ -3245,7 +4117,6 @@
                     html += `</div>`;
                     uiArea.innerHTML = html;
 
-                    // Bind chip selection buttons
                     data.chips.forEach(chip => {
                         document.getElementById(`btn-${chip.id}`).addEventListener('click', () => {
                             this.audio.playSFX('click');
@@ -3257,9 +4128,7 @@
 
                 renderUI();
 
-                // Draw already placed antennas as markers on SVG
                 const drawAntennaMarkers = () => {
-                    // Remove old antenna markers
                     const oldAntennas = svg.querySelectorAll('.antenna-marker');
                     oldAntennas.forEach(el => svg.removeChild(el));
 
@@ -3291,7 +4160,7 @@
                             label.setAttribute("style", "font-weight: bold; fill: #000; font-size: 9px;");
                             label.setAttribute("text-anchor", "middle");
                             label.setAttribute("dominant-baseline", "middle");
-                            label.textContent = chip.name.slice(-1); // e.g. A, B, C, D
+                            label.textContent = chip.name.slice(-1);
                             markerGroup.appendChild(label);
 
                             svg.appendChild(markerGroup);
@@ -3299,7 +4168,6 @@
                     });
                 };
 
-                // Add grid listener for antenna placement
                 const bgRect = svg.querySelector('.click-target-rect');
                 
                 const onGridClick = (e) => {
@@ -3320,7 +4188,6 @@
                     const xVal = Math.round((xPx - center) / step);
                     const yVal = Math.round(-(yPx - center) / step);
 
-                    // Validate coordinates (cannot be on axes for strict quadrant check in M5)
                     if (xVal === 0 || yVal === 0) {
                         this.audio.playSFX('fail');
                         alert("경계선(x축 또는 y축) 위에는 안테나를 정렬할 수 없습니다. 빈 사분면 영역에 배치하십시오.");
@@ -3328,15 +4195,12 @@
                     }
 
                     this.audio.playSFX('click');
-                    
-                    // Assign coordinate to selected chip
                     this.userInputs[selectedChipId] = { x: xVal, y: yVal };
-                    selectedChipId = null; // Reset selection
+                    selectedChipId = null;
 
                     renderUI();
                     drawAntennaMarkers();
 
-                    // Check if all 4 antennas are placed
                     const allPlaced = data.chips.every(c => this.userInputs[c.id] !== undefined);
                     if (allPlaced) {
                         document.getElementById('submit-mission-btn').style.display = 'block';
@@ -3350,7 +4214,7 @@
                 }, { passive: false });
             }
 
-            validateMission5() {
+            validateMission8() {
                 const data = this.currentMissionData;
                 let correctCount = 0;
                 
@@ -3554,7 +4418,7 @@
                 alertText2.setAttribute("class", "tick-label");
                 alertText2.setAttribute("style", "font-size: 11px; fill: #fff; opacity: 0.8;");
                 alertText2.setAttribute("text-anchor", "middle");
-                alertText2.textContent = "최종 비밀번호: [보안 구역 암호 단어] + [복구된 구역 수 (5)]";
+                alertText2.textContent = "최종 비밀번호: [보안 구역 암호 단어] + [복구된 구역 수 (8)]";
                 bg.appendChild(alertText2);
 
                 svg.appendChild(bg);
@@ -3564,7 +4428,7 @@
                 uiArea.innerHTML = `
                     <div style="background: rgba(255,0,127,0.05); border: 1px solid var(--neon-magenta); border-radius: 8px; padding: 12px; font-size: 0.85rem; line-height: 1.5;">
                         <span class="neon-text-magenta" style="font-weight: bold; font-family: var(--font-cyber);">NOVA 비상 통신:</span><br>
-                        "연구실 보안 기록에 따르면 최종 탈출 암호의 구조는 <strong>[보안 비밀단어]</strong> 뒤에 <strong>[복구된 구역 수 (5)]</strong>를 합성한 형태입니다. 서두르세요!"
+                        "연구실 보안 기록에 따르면 최종 탈출 암호의 구조는 <strong>[보안 비밀단어]</strong> 뒤에 <strong>[복구된 구역 수 (8)]</strong>를 합성한 형태입니다. 서두르세요!"
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
                         <input type="text" id="final-passwd-input" placeholder="PASSCODE 입력" style="background: rgba(0,0,0,0.6); border: 1px solid var(--neon-magenta); border-radius: 6px; padding: 10px; color: var(--neon-magenta); font-family: var(--font-mono); text-shadow: var(--glow-magenta); text-align: center; font-size: 1.4rem; text-transform: uppercase;">
@@ -3587,7 +4451,7 @@
                         "오호, 모의 해킹 시스템의 보안 락까지 도달했군. 하지만 이 연습용 게이트 코드도 꽤 까다로울걸?"
                     ], () => {
                         this.speak("NOVA", "🤖", [
-                            "조금만 더 힘내세요, 연구원 요원님! ZONE 2에서 획득한 암호 뒤에 '5'를 덧붙여 입력하시면 테스트 성공입니다!"
+                            "조금만 더 힘내세요, 연구원 요원님! ZONE 2에서 획득한 암호 뒤에 '8'을 덧붙여 입력하시면 테스트 성공입니다!"
                         ]);
                     });
                 } else if (this.difficulty === 'medium') {
@@ -3596,7 +4460,7 @@
                         "AI 연구소의 도킹 게이트는 영구 폐쇄된다!"
                     ], () => {
                         this.speak("NOVA", "🤖", [
-                            "연구원님, 해커 X의 방화벽 차단 단서를 해독하십시오! M2 단어 뒤에 복구 구역의 개수인 '5'를 붙여 암호를 완료하세요!"
+                            "연구원님, 해커 X의 방화벽 차단 단서를 해독하십시오! M2 단어 뒤에 복구 구역의 개수인 '8'을 붙여 암호를 완료하세요!"
                         ]);
                     });
                 } else {
@@ -3604,7 +4468,7 @@
                         "자폭 시퀀스가 90% 완료되었다! 탈출 셔틀 해치도 강제 이탈시켰으니, 너희는 여기서 나와 함께 연구소의 파편이 될 것이다!"
                     ], () => {
                         this.speak("NOVA", "🤖", [
-                            "시스템 붕괴 직전입니다! 메모해둔 M2 단어 뒤에 5를 결합해 마스터 코드를 즉시 주입하십시오! 시간이 없습니다!"
+                            "시스템 붕괴 직전입니다! 메모해둔 M2 단어 뒤에 8을 결합해 마스터 코드를 즉시 주입하십시오! 시간이 없습니다!"
                         ]);
                     });
                 }
@@ -3613,8 +4477,8 @@
             validateFinalMission() {
                 const inputVal = document.getElementById('final-passwd-input').value.trim().toUpperCase();
                 const targetWord = this.m2Word || "GRID";
-                // Final passcode = M2 Word + "5" (5 chips completed)
-                const correctPass = `${targetWord}5`;
+                // Final passcode = M2 Word + "8" (8 chips completed)
+                const correctPass = `${targetWord}8`;
                 return inputVal === correctPass;
             }
 
@@ -3823,7 +4687,7 @@
                 "경고: 외부 해커 X의 전방위적 트래픽 공격 감지!!",
                 "핵심 좌표 제어 데이터 세그먼트 파손율 95% 돌파.",
                 "NOVA: 연구원님, 서두르십시오. 연구실의 모든 물리 좌표 락이 틀어졌습니다.",
-                "연구실 좌표계를 순서쌍, 사분면 성질로 튜닝하여 탈출 경로를 개척해야 합니다!"
+                "발전기·냉각수·엔진·도킹까지 총 8개 구역의 좌표와 비례 관계식을 튜닝하여 탈출 경로를 개척해야 합니다!"
             ];
             
             let lineIdx = 0;
