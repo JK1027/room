@@ -347,211 +347,7 @@
         @media (max-width: 900px) and (min-width: 801px) {
             #game-board {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto 240px;
-            }
-        }
-
-        /* 모바일 세로모드(스마트폰 해상도) 완전 최적화 */
-        @media (max-width: 800px) {
-            body {
-                overflow: hidden;
-            }
-            #game-container {
-                padding: 6px;
-                height: 100dvh;
-            }
-            #hud-panel {
-                padding: 6px 10px;
-                margin-bottom: 6px;
-                border-radius: 6px;
-            }
-            .hud-left {
-                gap: 6px;
-            }
-            .hud-title {
-                font-size: 0.85rem !important;
-            }
-            #hud-difficulty-tag {
-                font-size: 0.7rem !important;
-                padding: 1px 3px !important;
-                margin-left: 3px !important;
-            }
-            .hud-progress-container {
-                gap: 2px;
-            }
-            .progress-bar-bg {
-                width: 60px;
-                height: 6px;
-            }
-            #progress-text {
-                font-size: 0.7rem !important;
-            }
-            .timer-display {
-                font-size: 0.95rem !important;
-                padding: 1px 4px;
-            }
-            .icon-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 0.8rem;
-                border-radius: 4px;
-            }
-
-            #game-board {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-                height: calc(100% - 44px);
-                min-height: 0;
-            }
-            #plane-panel {
-                flex: 1 1 auto;
-                min-height: 0;
-                padding: 2px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .plane-wrapper {
-                width: min(92vw, 68vh);
-                height: min(92vw, 68vh);
-                max-width: 440px;
-                max-height: 440px;
-                aspect-ratio: 1 / 1;
-            }
-
-            /* 하단 콘솔 단일 통합 및 높이 32vh 제한 */
-            #console-panel {
-                flex: 0 0 auto;
-                height: auto;
-                max-height: 32vh;
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-                min-height: 0;
-                background: rgba(10, 16, 32, 0.92) !important;
-                border: 1px solid var(--border-neon) !important;
-                border-radius: 8px;
-                padding: 6px;
-                box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.6) !important;
-                overflow: hidden;
-            }
-            #console-panel .glass-panel {
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                backdrop-filter: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-
-            /* NPC 영역 극소화 */
-            #npc-chat-panel {
-                flex: 0 0 auto !important;
-                margin-bottom: 2px;
-            }
-            .npc-box {
-                padding: 2px 4px;
-                gap: 6px;
-                align-items: center;
-                display: flex;
-            }
-            .npc-avatar {
-                width: 24px;
-                height: 24px;
-                border-width: 1px;
-                box-shadow: none !important;
-            }
-            .npc-avatar span {
-                font-size: 0.95rem !important;
-            }
-            .npc-name {
-                display: none; /* NOVA 이름 숨김 */
-            }
-            .dialog-text {
-                font-size: 0.8rem;
-                line-height: 1.3;
-                min-height: auto;
-                flex: 1;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-            /* 미션 및 인벤토리 영역 통합 */
-            .interaction-area {
-                padding: 2px;
-                gap: 4px;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-                min-height: 0;
-            }
-            .mission-status-box {
-                padding: 4px 6px;
-                font-size: 0.78rem;
-                border-width: 2px;
-            }
-            .hint-content-box {
-                display: none !important; /* 상단 💡 버튼이 있으므로 공간 확보를 위해 본문 힌트는 숨김 */
-            }
-
-            /* 인벤토리 초소형화 */
-            .inventory-title {
-                display: none !important;
-            }
-            .inventory-slots {
-                gap: 4px;
-                padding: 3px;
-                border-radius: 4px;
-            }
-            .inv-slot {
-                height: 36px;
-                border-style: solid;
-                border-width: 1px;
-            }
-            .inv-slot svg {
-                width: 60%;
-                height: 60%;
-            }
-
-            /* 하단 버튼 및 액션바 축소 */
-            .neon-btn {
-                padding: 8px 12px;
-                height: 40px;
-                font-size: 0.85rem;
-            }
-            .neon-btn:active, .icon-btn:active {
-                transform: scale(0.96) !important;
-                transition: transform 0.05s !important;
-            }
-
-            /* 인트로 화면 모바일 대응 */
-            #intro-screen {
-                gap: 10px !important;
-                justify-content: flex-start;
-                padding-top: 4vh;
-                overflow-y: auto;
-            }
-            .logo-area {
-                margin-bottom: 6px;
-            }
-            .logo-main {
-                font-size: 2.0rem !important;
-            }
-            .logo-sub {
-                font-size: 0.8rem !important;
-                letter-spacing: 1px !important;
-            }
-            .intro-cutscene {
-                height: 120px;
-                font-size: 0.9rem;
-                padding: 10px;
-            }
-            .login-group {
-                max-width: 100% !important;
-                padding: 10px !important;
+               ortant;
                 margin-bottom: 2px !important;
             }
             /* Safe area spacing */
@@ -1142,6 +938,216 @@
         .npc-box-waiting {
             animation: border-pulse 1.8s infinite ease-in-out;
             cursor: pointer;
+        }
+
+        /* 모바일 세로모드(스마트폰 해상도) 완전 최적화 - 스타일 상속을 받기 위해 CSS 최하단에 배치 */
+        @media (max-width: 800px) {
+            body {
+                overflow: hidden;
+            }
+            #game-container {
+                padding: 6px;
+                height: 100dvh;
+            }
+            #hud-panel {
+                padding: 6px 10px;
+                margin-bottom: 6px;
+                border-radius: 6px;
+            }
+            .hud-left {
+                gap: 6px;
+            }
+            .hud-title {
+                font-size: 0.85rem !important;
+            }
+            #hud-difficulty-tag {
+                font-size: 0.7rem !important;
+                padding: 1px 3px !important;
+                margin-left: 3px !important;
+            }
+            .hud-progress-container {
+                gap: 2px;
+            }
+            .progress-bar-bg {
+                width: 60px;
+                height: 6px;
+            }
+            #progress-text {
+                font-size: 0.7rem !important;
+            }
+            .timer-display {
+                font-size: 0.95rem !important;
+                padding: 1px 4px;
+            }
+            .icon-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+                border-radius: 4px;
+            }
+
+            #game-board {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                height: calc(100% - 44px);
+                min-height: 0;
+            }
+            #plane-panel {
+                flex: 1 1 auto;
+                min-height: 0;
+                padding: 2px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .plane-wrapper {
+                width: min(92vw, 68vh);
+                height: min(92vw, 68vh);
+                max-width: 440px;
+                max-height: 440px;
+                aspect-ratio: 1 / 1;
+            }
+
+            /* 하단 콘솔 단일 통합 및 높이 32vh 제한 */
+            #console-panel {
+                flex: 0 0 auto;
+                height: auto;
+                max-height: 32vh;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                min-height: 0;
+                background: rgba(10, 16, 32, 0.92) !important;
+                border: 1px solid var(--border-neon) !important;
+                border-radius: 8px;
+                padding: 6px;
+                box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.6) !important;
+                overflow: hidden;
+            }
+            #console-panel .glass-panel {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* NPC 영역 극소화 */
+            #npc-chat-panel {
+                flex: 0 0 auto !important;
+                margin-bottom: 2px;
+            }
+            .npc-box {
+                padding: 2px 4px;
+                gap: 6px;
+                align-items: center;
+                display: flex;
+            }
+            .npc-avatar {
+                width: 24px;
+                height: 24px;
+                border-width: 1px;
+                box-shadow: none !important;
+            }
+            .npc-avatar span {
+                font-size: 0.95rem !important;
+            }
+            .npc-name {
+                display: none; /* NOVA 이름 숨김 */
+            }
+            .dialog-text {
+                font-size: 0.8rem;
+                line-height: 1.3;
+                min-height: auto;
+                flex: 1;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            /* 미션 및 인벤토리 영역 통합 */
+            .interaction-area {
+                padding: 2px;
+                gap: 4px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+            }
+            .mission-status-box {
+                padding: 4px 6px;
+                font-size: 0.78rem;
+                border-width: 2px;
+            }
+            .hint-content-box {
+                display: none !important;
+            }
+
+            /* 인벤토리 초소형화 */
+            .inventory-title {
+                display: none !important;
+            }
+            .inventory-slots {
+                gap: 4px;
+                padding: 3px;
+                border-radius: 4px;
+            }
+            .inv-slot {
+                height: 36px;
+                border-style: solid;
+                border-width: 1px;
+            }
+            .inv-slot svg {
+                width: 60%;
+                height: 60%;
+            }
+
+            /* 하단 버튼 및 액션바 축소 */
+            .neon-btn {
+                padding: 8px 12px;
+                height: 40px;
+                font-size: 0.85rem;
+            }
+            .neon-btn:active, .icon-btn:active {
+                transform: scale(0.96) !important;
+                transition: transform 0.05s !important;
+            }
+
+            /* 인트로 화면 모바일 대응 */
+            #intro-screen {
+                gap: 10px !important;
+                justify-content: flex-start;
+                padding-top: 4vh;
+                overflow-y: auto;
+            }
+            .logo-area {
+                margin-bottom: 6px;
+            }
+            .logo-main {
+                font-size: 2.0rem !important;
+            }
+            .logo-sub {
+                font-size: 0.85rem !important;
+                letter-spacing: 1px !important;
+            }
+            .intro-cutscene {
+                height: 120px;
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+            .login-group {
+                max-width: 100% !important;
+                padding: 10px !important;
+                margin-bottom: 2px !important;
+            }
+            /* Safe area spacing */
+            body {
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-top: env(safe-area-inset-top);
+            }
         }
     </style>
 </head>
