@@ -10,7 +10,8 @@ function showHtmlDialog() {
   var html = HtmlService.createHtmlOutputFromFile('index')
       .setWidth(1000)
       .setHeight(750)
-      .setTitle('AI 연구소 탈출: 좌표평면');
+      .setTitle('AI 연구소 탈출: 좌표평면')
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1');
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
 
@@ -18,6 +19,7 @@ function showHtmlDialog() {
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index')
       .setTitle('AI 연구소 탈출: 좌표평면')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+      .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
