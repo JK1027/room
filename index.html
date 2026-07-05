@@ -1131,6 +1131,45 @@
             return false;
         };
 
+        // Safe storage wrapper for Google Apps Script third-party iframe environment
+        const SafeStorage = {
+            _data: {},
+            isSupported: function() {
+                try {
+                    const testKey = '__storage_test__';
+                    window.localStorage.setItem(testKey, testKey);
+                    window.localStorage.removeItem(testKey);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            getItem: function(key) {
+                if (this.isSupported()) {
+                    return window.localStorage.getItem(key);
+                }
+                return this._data[key] || null;
+            },
+            setItem: function(key, value) {
+                if (this.isSupported()) {
+                    try {
+                        window.localStorage.setItem(key, value);
+                        return;
+                    } catch(e){}
+                }
+                this._data[key] = String(value);
+            },
+            removeItem: function(key) {
+                if (this.isSupported()) {
+                    try {
+                        window.localStorage.removeItem(key);
+                        return;
+                    } catch(e){}
+                }
+                delete this._data[key];
+            }
+        };
+
         // ==========================================
         // 1. GAME DATA & CONFIGURATION (MISSION_CONFIG)
         // ==========================================
@@ -2026,10 +2065,10 @@
 
             loadSettings() {
                 const SAVE_VERSION = 'v2';
-                const savedVersion = localStorage.getItem('ai_lab_escape_version');
+                const savedVersion = SafeStorage.getItem('ai_lab_escape_version');
                 if (savedVersion !== SAVE_VERSION) {
-                    localStorage.removeItem('ai_lab_escape_save');
-                    localStorage.setItem('ai_lab_escape_version', SAVE_VERSION);
+                    SafeStorage.removeItem('ai_lab_escape_save');
+                    SafeStorage.setItem('ai_lab_escape_version', SAVE_VERSION);
                     this.currentMissionIndex = 0;
                     this.difficulty = 'easy';
                     this.useTimer = true;
@@ -2053,7 +2092,7 @@
                     this.saveLocal();
                 }
 
-                const saved = localStorage.getItem('ai_lab_escape_save');
+                const saved = SafeStorage.getItem('ai_lab_escape_save');
                 if (saved) {
                     try {
                         const parsed = JSON.parse(saved);
@@ -2118,7 +2157,7 @@
                     session: this.session, // 세션 데이터 저장
                     m2Word: this.m2Word
                 };
-                localStorage.setItem('ai_lab_escape_save', JSON.stringify(data));
+                SafeStorage.setItem('ai_lab_escape_save', JSON.stringify(data));
             }
 
             saveRemote(payload = {}) {
@@ -2192,7 +2231,7 @@
 
             resetEntireGame() {
                 // 모든 세션 정보 및 로컬 세이브 완전 삭제
-                localStorage.removeItem('ai_lab_escape_save');
+                SafeStorage.removeItem('ai_lab_escape_save');
                 this.currentMissionIndex = 0;
                 this.difficulty = 'easy';
                 this.inventory = [];
@@ -2294,7 +2333,7 @@
                             hintBox.style.display = 'block';
                         } else if (this.currentMissionIndex === 8) {
                             // Final mission hint
-                            const saved = localStorage.getItem('ai_lab_escape_save');
+                            const saved = SafeStorage.getItem('ai_lab_escape_save');
                             let targetWord = "GRID";
                             if (saved) {
                                 try {
