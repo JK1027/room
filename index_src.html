@@ -1882,6 +1882,39 @@
                         if (points[points.length-1].x < 5) {
                             points.push({x: 5, y: Math.floor(Math.random() * 9) - 4});
                         }
+                        
+                        // 난이도별 필수 구간 보장 로직
+                        if (difficulty === 'medium') {
+                            // 중급: 반드시 수평(constant) 구간이 1개 이상 필요
+                            let hasConstant = false;
+                            for (let i = 0; i < points.length - 1; i++) {
+                                if (points[i].y === points[i+1].y) {
+                                    hasConstant = true;
+                                    break;
+                                }
+                            }
+                            if (!hasConstant && points.length > 1) {
+                                let targetIdx = Math.floor(Math.random() * (points.length - 1));
+                                points[targetIdx + 1].y = points[targetIdx].y;
+                            }
+                        } else if (difficulty === 'easy') {
+                            // 초급: 반드시 감소(decrease) 구간이 1개 이상 필요
+                            let hasDecrease = false;
+                            for (let i = 0; i < points.length - 1; i++) {
+                                if (points[i].y > points[i+1].y) {
+                                    hasDecrease = true;
+                                    break;
+                                }
+                            }
+                            if (!hasDecrease && points.length > 1) {
+                                let targetIdx = Math.floor(Math.random() * (points.length - 1));
+                                points[targetIdx + 1].y = points[targetIdx].y - 1;
+                                if (points[targetIdx + 1].y < -4) {
+                                    points[targetIdx].y = -3;
+                                    points[targetIdx + 1].y = -4;
+                                }
+                            }
+                        }
                     }
                     let segments = [];
                     for(let i=0; i<points.length-1; i++) {
