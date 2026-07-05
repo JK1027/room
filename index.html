@@ -8,6 +8,39 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Orbit&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- 샌드박스 치명적 오류 감지용 최상위 스크립트 -->
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            var errBox = document.createElement('div');
+            errBox.style.position = 'fixed';
+            errBox.style.top = '10%';
+            errBox.style.left = '10%';
+            errBox.style.width = '80%';
+            errBox.style.padding = '20px';
+            errBox.style.backgroundColor = 'rgba(255, 0, 0, 0.9)';
+            errBox.style.color = '#fff';
+            errBox.style.zIndex = '999999';
+            errBox.style.fontFamily = 'monospace';
+            errBox.style.fontSize = '16px';
+            errBox.style.whiteSpace = 'pre-wrap';
+            errBox.innerHTML = "<h1>FATAL SCRIPT ERROR</h1>" + 
+                               "Message: " + msg + "<br>" +
+                               "Line: " + lineNo + ":" + columnNo + "<br>" +
+                               "Stack: " + (error ? error.stack : "none");
+            
+            var attachErr = function() {
+                if (document.body) {
+                    document.body.appendChild(errBox);
+                } else {
+                    setTimeout(attachErr, 100);
+                }
+            };
+            attachErr();
+            return false;
+        };
+    </script>
+    
     <style>
         /* CSS RESET & VARIABLES */
         * {
@@ -4650,13 +4683,36 @@
         const game = new GameManager();
 
         function initGameAndIntro() {
+            const introBox = document.getElementById('intro-dialog-box');
+            if (!introBox) {
+                console.error("Critical: intro-dialog-box not found in DOM.");
+                return;
+            }
+            
+            // 디버그 트레이스 초기화
+            introBox.innerHTML = '<span style="color:#ffb800; font-size:12px;">[DEBUG] initGameAndIntro called.</span><br>';
+
             // game.init()이 에러를 내도 인트로 타이핑이 무조건 실행되도록 try-catch로 보호
             let initError = null;
             try {
+                introBox.innerHTML += '<span style="color:#ffb800; font-size:12px;">[DEBUG] game.init() start.</span><br>';
                 game.init();
+                introBox.innerHTML += '<span style="color:#ffb800; font-size:12px;">[DEBUG] game.init() done.</span><br>';
             } catch(e) {
                 initError = e;
                 console.error("game.init() error:", e);
+                introBox.innerHTML += '<span style="color:red; font-size:12px;">[DEBUG ERROR] ' + e.message + '</span><br>';
+            }
+
+            // init 에러가 있으면 인트로 박스에 표시하고 중단
+            if (initError) {
+                const errP = document.createElement('p');
+                errP.style.color = 'red';
+                errP.style.fontSize = '11px';
+                errP.style.wordBreak = 'break-all';
+                errP.innerText = "INIT FATAL ERROR: " + initError.message + "\n" + (initError.stack || '');
+                introBox.appendChild(errP);
+                return;
             }
 
             // Intros dialogue initialization
@@ -4669,22 +4725,8 @@
             ];
             
             let lineIdx = 0;
-            const introBox = document.getElementById('intro-dialog-box');
-            if (!introBox) {
-                console.error("Critical: intro-dialog-box not found in DOM.");
-                return;
-            }
-
-            // init 에러가 있으면 인트로 박스에 표시
-            if (initError) {
-                const errP = document.createElement('p');
-                errP.style.color = 'red';
-                errP.style.fontSize = '11px';
-                errP.style.wordBreak = 'break-all';
-                errP.innerText = "INIT ERROR: " + initError.message + "\n" + (initError.stack || '');
-                introBox.appendChild(errP);
-                return;
-            }
+            
+            introBox.innerHTML += '<span style="color:#ffb800; font-size:12px;">[DEBUG] starting typeIntroText.</span><br><hr style="border-color:#333; margin: 10px 0;">';
             
             function typeIntroText() {
                 if (lineIdx < introCutsceneText.length) {
@@ -4705,6 +4747,10 @@
                         }
                     }
                     typeChar();
+                } else {
+                    const finishP = document.createElement('p');
+                    finishP.innerHTML = '<span style="color:#39ff14; font-size:11px;">[DEBUG] typeIntroText completed successfully.</span>';
+                    introBox.appendChild(finishP);
                 }
             }
             typeIntroText();
