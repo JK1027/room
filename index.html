@@ -1126,6 +1126,11 @@
 
     <!-- MAIN GAME SCRIPT -->
     <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            alert("JS Error: " + message + " at line " + lineno + ":" + colno + "\nSource: " + source);
+            return false;
+        };
+
         // ==========================================
         // 1. GAME DATA & CONFIGURATION (MISSION_CONFIG)
         // ==========================================
@@ -4558,7 +4563,8 @@
 
         // Global manager instanciation
         const game = new GameManager();
-        window.addEventListener('DOMContentLoaded', () => {
+
+        function initGameAndIntro() {
             game.init();
             
             // Intros dialogue initialization
@@ -4572,6 +4578,10 @@
             
             let lineIdx = 0;
             const introBox = document.getElementById('intro-dialog-box');
+            if (!introBox) {
+                console.error("Critical: intro-dialog-box not found in DOM.");
+                return;
+            }
             
             function typeIntroText() {
                 if (lineIdx < introCutsceneText.length) {
@@ -4595,7 +4605,13 @@
                 }
             }
             typeIntroText();
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', initGameAndIntro);
+        } else {
+            initGameAndIntro();
+        }
     </script>
 
 </body>
