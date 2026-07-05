@@ -2781,6 +2781,45 @@
                 }
             }
 
+            removeInventory(itemName) {
+                const idx = this.inventory.findIndex(it => it.name === itemName);
+                if (idx !== -1) {
+                    this.inventory.splice(idx, 1);
+                    this.updateInventoryUI();
+                    this.saveSettings();
+                }
+            }
+
+            sanitizeInventory() {
+                const m = MISSION_CONFIG[this.currentMissionIndex];
+                if (!m) return;
+                
+                // 1. Remove duplicate items (unique by name)
+                const unique = [];
+                const seen = new Set();
+                this.inventory.forEach(item => {
+                    if (item && item.name && !seen.has(item.name)) {
+                        seen.add(item.name);
+                        unique.push(item);
+                    }
+                });
+                this.inventory = unique;
+
+                // 2. Auto recover required item if missing
+                if (m.itemToUse) {
+                    const hasItem = this.inventory.some(it => it.name === m.itemToUse);
+                    if (!hasItem) {
+                        const prevMission = MISSION_CONFIG.find(pm => pm.itemToReward && pm.itemToReward.name === m.itemToUse);
+                        if (prevMission) {
+                            this.inventory.push(prevMission.itemToReward);
+                        }
+                    }
+                }
+                
+                this.updateInventoryUI();
+                this.saveSettings();
+            }
+
             addAchievement(achName) {
                 if (!this.achievements.includes(achName)) {
                     this.achievements.push(achName);
@@ -3159,6 +3198,7 @@
             // 5. CORE MISSION CONTROL LAYER
             // ==========================================
             loadActiveMission() {
+                this.sanitizeInventory();
                 // Remove warnings
                 document.getElementById('warning-banner').style.display = 'none';
                 document.body.classList.remove('siren-active');
@@ -3240,6 +3280,8 @@
                         if (tooltip.includes(requiredItem)) {
                             // SFX & animation
                             this.audio.playSFX('gate');
+                            
+                            this.removeInventory(requiredItem);
                             
                             // Load dialog for item activation
                             const m = MISSION_CONFIG[this.currentMissionIndex];
