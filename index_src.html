@@ -4375,7 +4375,7 @@
                         const btnTheme = isPlaced ? "success" : "danger";
                         
                         html += `
-                            <button class="neon-btn ${btnTheme} ${activeClass}" id="btn-${chip.id}" style="font-size: 0.8rem; padding: 6px 8px; flex-direction: column; text-align: left; align-items: flex-start; gap: 2px;">
+                            <button class="neon-btn ${btnTheme} ${activeClass}" id="btn-${chip.id}" style="font-size: 0.8rem; padding: 6px 8px; flex-direction: column; text-align: left; align-items: flex-start; gap: 2px; height: auto !important; display: flex !important;">
                                 <strong>${chip.name}</strong>
                                 <span style="font-size: 0.65rem; opacity: 0.7; color: var(--neon-yellow);">${chip.desc}</span>
                                 <span style="font-size: 0.7rem; opacity: 0.8;">위치: ${placeStr}</span>
